@@ -1,0 +1,68 @@
+/* Your Custom CSS Goes here */
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 20px;
+}
+
+.app-menu>ul>li>a {
+    /*text-decoration: none;
+    color: #40475c;
+    font-size: 14px;
+    margin: 3px 15px;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 3px;
+    line-height: 20px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;*/
+    text-decoration: none;
+    color: #616778;
+    font-size: 18px;
+    margin: 5px 15px;
+    padding: 30px 15px !important;
+    display: block;
+    border-radius: 3px;
+    line-height: 20px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+.section-body {
+    flex: 1 1 auto;
+    padding: 1.3rem 2.5rem;
+    background: white;
+    border-radius: 15px;
+}
+
+.buttonsActions i{
+    opacity: 0.4;
+}
+
+.buttonsActions i:hover{
+    opacity: 1;
+}
+
+.buttonsActions a{
+    color: black;
+    margin: 0 2px;
+}
+
+/*css notification*/
+.notificacion_alert{
+	position: fixed;
+	top: 70px;
+	right: 30px;
+	z-index: 999999;
+}
+
+.notificacion_alert .text-white.message{
+	padding: 15px;
+}
+
+
+/*css notification*/

@@ -1,0 +1,464 @@
+<div class="row">
+    <div class="col">
+        <div class="page-description d-flex justify-content-between">
+            <h1>Usuarios</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#agregarUsuario">Agregar</button>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="section-body">
+            <table id="usuariosTable" class="display" style="width:100%">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!--MODALES-->
+
+<!--MODAL AGREGAR USUARIOS-->
+
+<div class="modal fade" id="agregarUsuario" tabindex="-1" aria-labelledby="agregarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarUsuarioLabel">Agregar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="agregarUsuarioForm">
+                    <div class="row">
+
+                        <h5>Datos personales</h5>
+                        <div class="mb-3 col-12">
+                            <label for="nombre_usuario" class="form-label">Nombre completo</label>
+                            <input type="text" name="nombre_usuario" id="nombre_usuario" class="form-control"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="telefono_usuario" class="form-label">Número de teléfono</label>
+                            <input type="number" name="telefono_usuario" id="telefono_usuario" class="form-control"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="nombre" class="form-label">Sexo</label>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" value="hombre" name="radio_sexo" id="radio_sexo1" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="radio_sexo1">Hombre</label>
+                              
+                                <input type="radio" class="btn-check" value="mujer" name="radio_sexo" id="radio_sexo2" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="radio_sexo2">Mujer</label>
+                              
+                              </div>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="text" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" id="fechaPago">
+                        </div>
+
+                        <hr class="mt-2">
+
+                        <h5 class="mt-2">Contacto de emergencia</h5>
+
+                        <div class="mb-3 col-12">
+                            <label for="nombre_contacto" class="form-label">Nombre completo</label>
+                            <input type="text" name="nombre_contacto"  id="nombre_contacto" class="form-control"
+                                aria-describedby="emailHelp">
+
+                        </div>
+
+                        <div class="mb-3 col-12">
+                            <label for="telefono_contacto" class="form-label">Número de teléfono</label>
+                            <input type="number" name="telefono_contacto" class="form-control" id="telefono_contacto"
+                                aria-describedby="emailHelp">
+                        </div>
+
+                        <!--<div id="emailHelp" class="form-text">Ingresa la modalidad de pago antes de seleccionar la fecha</div>-->
+
+                        <hr class="mt-2">
+
+                        <h5 class="mt-2">Facturación</h5>
+
+                        <div class="mb-3 col-6">
+
+                            <label for="modalidad" class="form-label">Modalidad de ingreso</label>
+                            <select class="form-select" id="modalidad" name="modalidad" aria-label="Selecciona la modalidad">
+                                <option value="default" selected>Selecciona la modalidad</option>
+                                <option value="diario">Diario</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="mensual">Mensual</option>
+                                <option value="bimestral">Bimestral</option>
+                                <option value="semestral">Semestral</option>
+                                <option value="anual">Anual</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="fecha_pago" class="form-label">Fecha de pago</label>
+                            <input type="text" name="fecha_pago" id="fecha_pago" class="form-control" id="fechaPago">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="agregarUsuarioForm" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+    const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
+                        <a href="configuracion"><i class="material-icons-two-tone">edit</i></a>
+                        <a href="configuracion"><i class="material-icons-two-tone">payments</i></a>
+                        <a href="configuracion"><i class="material-icons-two-tone">fingerprint</i></a>
+                        <a href="configuracion"><i class="material-icons-two-tone">delete</i></a>
+                        </div>`;
+
+
+
+    $(document).ready(function () {
+
+        var tablaUsuarios = $('#usuariosTable').DataTable({
+            "initComplete": function (settings, json) {
+
+
+            },
+            dom: 'lrt',
+            columns: [
+
+                { data: 'nombre_usuario', title: 'Nombre' },
+                { data: 'modalidad', title: 'Modalidad' },
+                { data: 'sig_pago', title: 'Sig. Pago', orderable: false, width: '80px' },
+                { data: 'sig_pago_timestamp', title: 'Adeudo', orderable: false, width: '110px' },
+                { title: 'Opciones', class: 'details-control', orderable: false, defaultContent: action_iconsNP, data: null, width: '50px' },
+            ],
+            autoWidth: false,
+            search: {
+                return: true,
+            },
+            info: false,
+            paging: false,
+            targets: 'no-sort',
+            bSort: true,
+            order: [[0, 'asc']],
+
+        });
+
+
+
+
+
+        async function resetTablaUsuarios() {
+
+            tablaUsuarios.clear().draw()
+
+            const { res } = await asyncGetAjax('/usuarios/cargar');
+
+            console.log({ res });
+
+            const datosTabla = [];
+
+            res.forEach(element => {
+                datosTabla.push(element);
+            });
+
+            console.log({ datosTabla });
+
+            tablaUsuarios.rows.add(datosTabla).draw();
+        }
+
+        resetTablaUsuarios()
+
+
+        $('#agregarUsuarioForm').submit(async function (event) {
+            event.preventDefault();
+
+            const $form = $("#agregarUsuarioForm");
+            const data = getFormData($form);
+
+            const fecha_pago_timestamp = toTimestamp(data.fecha_pago);
+            data.fecha_pago_timestamp = fecha_pago_timestamp;
+
+            const { sig_pago, sig_pago_timestamp } = sigPago(data.modalidad, fecha_pago_timestamp);
+
+            data.sig_pago = sig_pago;
+            data.sig_pago_timestamp = sig_pago_timestamp;
+
+           console.log({data})
+
+
+            try {
+
+                const postUser = await asyncPostAjax('/usuarios/agregar', data);
+
+
+                if( postUser.state = 'success' ){
+
+                    $('#agregarUsuario').modal('toggle');
+                    limpiarAgregarUsuario();
+                    showNotification(postUser.state,  postUser.message);
+
+                }
+
+                console.log(postUser);
+
+            } catch (e) {
+
+                console.log(e);
+
+            }
+
+
+        });
+
+
+        $(function () {
+            $('input[name="fecha_pago"]').daterangepicker({
+                startDate: moment(),
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2020,
+                maxYear: 2030
+            }, function (start, end, label) {
+                var years = moment().diff(start, 'years');
+            });
+
+            $('input[name="fecha_nacimiento"]').daterangepicker({
+                startDate: moment(),
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1900,
+                maxYear: 2020
+            }, function (start, end, label) {
+                var years = moment().diff(start, 'years');
+            });
+        });
+
+
+        //FUNCIONES GLOBALES
+
+        function getFormData($form) {
+
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+
+            $.map(unindexed_array, function (n, i) {
+
+                indexed_array[n['name']] = n['value'].trim();
+
+            });
+
+            return indexed_array;
+
+        }
+
+
+        async function asyncPostAjax(path, data,) {
+
+            return await $.ajax({
+
+                type: 'POST',
+                url: path,
+                data: JSON.stringify(data),
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                success: function (result) {
+
+                    return result;
+
+                },
+
+            });
+
+        }
+
+        async function asyncGetAjax(path) {
+
+            return await $.ajax({
+
+                type: 'GET',
+                url: path,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                success: function (result) {
+
+                    return result;
+
+                },
+
+            });
+
+        }
+
+        function toTimestamp(fecha) {
+            // Obtener los componentes de la fecha
+            const partesFecha = fecha.split('/');
+            const dia = partesFecha[1];
+            const mes = partesFecha[0] - 1; // Los meses en JavaScript comienzan desde 0 (enero es 0, febrero es 1, etc.)
+            const anio = partesFecha[2];
+
+            // Crear un objeto de fecha
+            const fechaObjeto = new Date(anio, mes, dia);
+
+            // Obtener el timestamp en milisegundos
+            const timestamp = fechaObjeto.getTime();
+
+            return timestamp;
+        }
+
+        function toDate(timestamp) {
+            // Crear un objeto de fecha a partir del timestamp en milisegundos
+            const fechaObjeto = new Date(timestamp);
+
+            // Obtener los componentes de la fecha
+            const dia = String(fechaObjeto.getDate()).padStart(2, '0'); // Agregar ceros a la izquierda si el día es menor a 10
+            const mes = String(fechaObjeto.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0 a 11, se suma 1 y se agregan ceros a la izquierda si el mes es menor a 10
+            const anio = fechaObjeto.getFullYear();
+
+            // Formatear la fecha como DD/MM/YYYY
+            const fechaFormateada = `${mes}/${dia}/${anio}`;
+
+            return fechaFormateada;
+        }
+
+        function sigPago(modalidad, timestamp) {
+            let tiempo_pagado = 0;
+            var sig_pago_timestamp = 0;
+            var sig_pago = 0;
+            switch (modalidad) {
+                case 'diario':
+
+                    tiempo_pagado = 24 * 60 * 60 * 1000;
+                    sig_pago_timestamp = timestamp + tiempo_pagado;
+                    sig_pago = toDate(sig_pago_timestamp);
+
+                    break;
+                case 'semanal':
+
+                    tiempo_pagado = 7 * 24 * 60 * 60 * 1000;
+                    sig_pago_timestamp = timestamp + tiempo_pagado;
+                    sig_pago = toDate(sig_pago_timestamp);
+
+
+                    break;
+                case 'mensual':
+
+                    sig_pago_timestamp = sumarMesesTimestamp(timestamp, 1);
+                    sig_pago = toDate(sig_pago_timestamp);
+
+
+                    break;
+                case 'bimestral':
+
+                    sig_pago_timestamp = sumarMesesTimestamp(timestamp, 2);
+                    sig_pago = toDate(sig_pago_timestamp);
+
+
+                    break;
+                case 'semestral':
+
+                    sig_pago_timestamp = sumarMesesTimestamp(timestamp, 6);
+                    sig_pago = toDate(sig_pago_timestamp);
+
+
+                    break;
+                case 'anual':
+
+                    sig_pago_timestamp = sumarMesesTimestamp(timestamp, 12);
+                    sig_pago = toDate(sig_pago_timestamp);
+
+
+                    break;
+                default:
+
+
+
+                    break;
+            }
+
+            return { sig_pago, sig_pago_timestamp };
+
+
+
+        }
+
+
+        function cantidadDiaEnMes(timestamp) {
+            const fecha = new Date(timestamp);
+            const mes = fecha.getMonth();
+            const anio = fecha.getFullYear();
+
+            const primerDiaMes = new Date(anio, mes, 1);
+            const ultimoDiaMes = new Date(anio, mes + 1, 0);
+
+            const cantidadDias = ultimoDiaMes.getDate();
+
+            return cantidadDias;
+        }
+
+        function sumarMesesTimestamp(timestamp, cantidadMeses) {
+            const fecha = new Date(timestamp);
+            const dia = fecha.getDate();
+            const mes = fecha.getMonth();
+            const anio = fecha.getFullYear();
+
+            const nuevaFecha = new Date(anio, mes + cantidadMeses, dia);
+            const nuevoTimestamp = nuevaFecha.getTime();
+
+            return nuevoTimestamp;
+        }
+
+
+        function limpiarAgregarUsuario(){
+
+            $('#nombre_usuario').val('');
+            $('#nombre_contacto').val('');
+            $('#telefono_usuario').val('');
+            $('#telefono_contacto').val('');
+            $('#radio_sexo1').prop('checked', false);
+            $('#radio_sexo2').prop('checked', false);
+            $('#modalidad').val('default');
+            $('#fecha_pago').data('daterangepicker').setStartDate(moment());
+            $('#fecha_nacimiento').data('daterangepicker').setStartDate(moment());
+
+        }
+
+
+
+    });
+
+
+
+
+
+
+
+</script>
