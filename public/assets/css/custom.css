@@ -50,6 +50,7 @@
 .buttonsActions a{
     color: black;
     margin: 0 2px;
+    cursor: pointer;
 }
 
 /*css notification*/

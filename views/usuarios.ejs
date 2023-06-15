@@ -123,24 +123,54 @@
 </div>
 
 
+<!-- MODAL ELIMINAR USUARIO -->
 
-
-
+<div class="modal fade" id="eliminarUsuario" tabindex="-1" aria-labelledby="eliminarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eliminarUsuarioLabel">Eliminar usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>¿Estas seguro que deseas eliminar a...?</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">No, cancelar.</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Sí, eliminar.</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
 <script>
 
+
     const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
-                        <a href="configuracion"><i class="material-icons-two-tone">edit</i></a>
-                        <a href="configuracion"><i class="material-icons-two-tone">payments</i></a>
-                        <a href="configuracion"><i class="material-icons-two-tone">fingerprint</i></a>
-                        <a href="configuracion"><i class="material-icons-two-tone">delete</i></a>
+                        <a data-bs-toggle="modal" data-bs-target="#agregarUsuario"><i class="material-icons-two-tone">edit</i></a>
+                        <a href="/usuarios"><i class="material-icons-two-tone">payments</i></a>
+                        <a href="/usuarios"><i class="material-icons-two-tone">fingerprint</i></a>
+                        <a data-bs-toggle="modal" data-bs-target="#eliminarUsuario"><i class="material-icons-two-tone">delete</i></a>
                         </div>`;
 
 
 
     $(document).ready(function () {
+
+
+        console.log(window.location);
+
+        busqueda = window.location.search;
+
+        if( busqueda == '?agregar-usuario' ){
+            console.log('entra');
+            var modal = new bootstrap.Modal(document.getElementById("agregarUsuario"));
+            modal.show();
+        }
+
+
 
         var tablaUsuarios = $('#usuariosTable').DataTable({
             "initComplete": function (settings, json) {
@@ -150,11 +180,11 @@
             dom: 'lrt',
             columns: [
 
-                { data: 'nombre_usuario', title: 'Nombre' },
-                { data: 'modalidad', title: 'Modalidad' },
-                { data: 'sig_pago', title: 'Sig. Pago', orderable: false, width: '80px' },
-                { data: 'sig_pago_timestamp', title: 'Adeudo', orderable: false, width: '110px' },
-                { title: 'Opciones', class: 'details-control', orderable: false, defaultContent: action_iconsNP, data: null, width: '50px' },
+                { data: 'nombre_usuario', title: 'Nombre', width: '30%' },
+                { data: 'modalidad', title: 'Modalidad', width: '15%' },
+                { data: 'sig_pago', title: 'Sig. Pago', orderable: false, width: '15%' },
+                { data: 'sig_pago_timestamp', title: 'Adeudo', orderable: false, width: '20%' },
+                { title: 'Opciones', class: 'details-control', orderable: false, defaultContent: action_iconsNP, data: null, width: '20%' },
             ],
             autoWidth: false,
             search: {
@@ -197,41 +227,51 @@
         $('#agregarUsuarioForm').submit(async function (event) {
             event.preventDefault();
 
-            const $form = $("#agregarUsuarioForm");
-            const data = getFormData($form);
+            const {isValidado, mensajeValidacion} = validarAgregarUSuarios();
 
-            const fecha_pago_timestamp = toTimestamp(data.fecha_pago);
-            data.fecha_pago_timestamp = fecha_pago_timestamp;
+            if( isValidado ){
 
-            const { sig_pago, sig_pago_timestamp } = sigPago(data.modalidad, fecha_pago_timestamp);
+            
+                const $form = $("#agregarUsuarioForm");
+                const data = getFormData($form);
 
-            data.sig_pago = sig_pago;
-            data.sig_pago_timestamp = sig_pago_timestamp;
+                const fecha_pago_timestamp = toTimestamp(data.fecha_pago);
+                data.fecha_pago_timestamp = fecha_pago_timestamp;
 
-           console.log({data})
+                const { sig_pago, sig_pago_timestamp } = sigPago(data.modalidad, fecha_pago_timestamp);
 
+                data.sig_pago = sig_pago;
+                data.sig_pago_timestamp = sig_pago_timestamp;
 
-            try {
+            console.log({data})
+
+            console.log()
+
+                try {
 
                 const postUser = await asyncPostAjax('/usuarios/agregar', data);
 
 
-                if( postUser.state = 'success' ){
+                    if( postUser.state = 'success' ){
 
-                    $('#agregarUsuario').modal('toggle');
-                    limpiarAgregarUsuario();
-                    showNotification(postUser.state,  postUser.message);
+                        $('#agregarUsuario').modal('toggle');
+                        limpiarAgregarUsuario();
+                        showNotification(postUser.state,  postUser.message);
+                        resetTablaUsuarios()
+
+                    }
+
+                    console.log(postUser);
+
+                } catch (e) {
+
+                    console.log(e);
 
                 }
-
-                console.log(postUser);
-
-            } catch (e) {
-
-                console.log(e);
-
+            
+            }else{
+                showNotification('warning',  mensajeValidacion);
             }
-
 
         });
 
@@ -451,14 +491,53 @@
 
         }
 
+        function validarAgregarUSuarios(){
+
+            isValidado = true;
+            mensajeValidacion = '';
+
+            var checked = $('input[name="radio_sexo"]:checked').length > 0;
+            if (checked) {
+                mensajeValidacion = 'Debes de llenar todos los campos personales y de facturación.'
+            } else {
+                isValidado = false;
+            }
+
+
+            console.log($('#modalidad').val());
+            if( $('#modalidad').val() == 'default' ){
+                isValidado = false;
+                mensajeValidacion = 'Debes de llenar todos los campos personales y de facturación.'
+            }
+
+
+            if( $('#nombre_usuario').val() == '' || $('#nombre_usuario').val() == '' ){
+                isValidado = false;
+                mensajeValidacion = 'Debes de llenar todos los campos personales y de facturación.'
+            }
+            
+
+            return {isValidado, mensajeValidacion};
+
+        }
+
+
+        
+
+
+
+
+
+
+
+
 
 
     });
 
 
 
-
-
+    
 
 
 </script>
