@@ -28,3 +28,17 @@ const initOrders = `CREATE TABLE IF NOT EXISTS usuarios (
 db_main.prepare(initOrders).run();
 
 db_main.close();
+
+
+const db_gimnasio = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+
+const initPagos = `CREATE TABLE IF NOT EXISTS conceptos (
+                        secuencia INTEGER NOT NULL,
+                        id TEXT NOT NULL,
+                        concepto_pago TEXT NOT NULL, 
+                        precio_pago NUMERIC NOT NULL
+                    )`;
+
+db_gimnasio.prepare(initPagos).run();
+
+db_gimnasio.close();

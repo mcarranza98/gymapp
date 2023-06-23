@@ -2,7 +2,7 @@ const {index} = require('../index');
 const {usuarios, loadUsuarios} = require('../usuarios');
 const {gimnasio} = require('../gimnasio');
 const { configuracion } = require('../configuracion');
-const posts = require('../posts/posts');
+const {posts, cambiarPrecio, getConceptos, setPrecio} = require('../posts/posts');
 
 
 module.exports = [
@@ -11,5 +11,8 @@ module.exports = [
     loadUsuarios,
     gimnasio,
     configuracion,
-    posts
+    posts,
+    cambiarPrecio,
+    getConceptos,
+    setPrecio
 ]

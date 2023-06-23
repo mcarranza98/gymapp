@@ -8,6 +8,7 @@ const expressLayouts = require('express-ejs-layouts');
 
 const routes = require('./routes/routing/routes')
 const sql = require('./routes/sql/tablas')
+const main = require('./src/main')
 
 var app = express();
 

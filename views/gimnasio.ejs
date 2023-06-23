@@ -1,31 +1,194 @@
 <div class="row">
     <div class="col">
-        <div class="page-description">
+        <div class="page-description d-flex justify-content-between">
             <h1>Gimnasio</h1>
         </div>
+
     </div>
 </div>
 <div class="row">
     <div class="col-12">
-        <div class="card widget widget-stats">
-            <div class="card-body">
-                <div class="widget-stats-container d-flex">
-                    <div class="widget-stats-icon widget-stats-icon-primary">
-                        <i class="material-icons-outlined">paid</i>
+        <div class="section-body">
+            <h3 class="pt-2">Lista de precios</h3>
+            <table id="listaPreciosTable" class="display" style="width:100%">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 pt-5">
+        <div class="section-body">
+            <div class="d-flex justify-content-between">
+                <h3 class="pt-2">Promociones / descuentos</h3>
+                <button type="button" class="btn btn-primary">Agregar</button>
+            </div>
+            <table id="listaPromosTable" class="display" style="width:100%">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PARA -->
+
+<div class="modal fade" id="modalModificarPrecio" tabindex="-1" aria-labelledby="modalModificarPrecioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarPrecioLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modificarPrecioForm">
+                    <div class="row">
+                        <div class="mb-6 col-12">
+                            <label for="nuevo_precio" class="form-label">Nuevo precio</label>
+                            <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
                     </div>
-                    <div class="widget-stats-content flex-fill">
-                        <span class="widget-stats-title">Today's Sales</span>
-                        <span class="widget-stats-amount">$38,211</span>
-                        <span class="widget-stats-info">471 Orders Total</span>
-                    </div>
-                    <div class="widget-stats-indicator widget-stats-indicator-negative align-self-start">
-                        <i class="material-icons">keyboard_arrow_down</i> 4%
-                    </div>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="modificarPrecioForm" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>
 </div>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
 
+<script>
+
+    const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
+                                <a data-bs-toggle="modal" data-bs-target="#modalModificarPrecio"><i class="material-icons-two-tone">edit</i></a>
+                            </div>`;
+
+
+
+    $(document).ready(function () {
+
+        
+
+        var tablaPrecios = $('#listaPreciosTable').DataTable({
+            "initComplete": function (settings, json) {
+
+
+            },
+            dom: 'lrt',
+            columns: [
+                { data: 'secuencia', title: 'secuencia', visible: false },
+                { data: 'id', title: 'id', visible: false },
+                { data: 'concepto_pago', title: 'Concepto', width: '60%', visible: true },
+                { data: 'precio_pago', title: 'Precio', orderable: false, width: '25%' },
+                { title: '', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsNP , width: '15%' },
+            ],
+            autoWidth: false,
+            search: {
+                return: true,
+            },
+            info: false,
+            paging: false,
+            targets: 'no-sort',
+            bSort: true,
+            order: [[0, 'asc']],
+
+        });
+        
+        obtenerConceptos();
+
+
+        var tablaPromos = $('#listaPromosTable').DataTable({
+            "initComplete": function (settings, json) {
+
+
+            },
+            dom: 'lrt',
+            columns: [
+                { data: 'nombre_promo', title: 'Nombre', width: '50%', visible: true },
+                { data: 'tipo', title: 'Tipo', orderable: false, width: '25%' },
+                { data: 'porcentaje', title: 'Porcentaje', orderable: false, width: '25%' },
+                { title: 'Opciones', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsNP , width: '25%' },
+            ],
+            autoWidth: false,
+            search: {
+                return: true,
+            },
+            info: false,
+            paging: false,
+            targets: 'no-sort',
+            bSort: true,
+            order: [[0, 'asc']],
+
+        });
+
+        async function obtenerConceptos(){
+
+            tablaPrecios.clear().draw()
+
+            var conceptos = await $.get('/gimnasio/obtener/conceptos');
+
+            console.log({conceptos});
+
+            tablaPrecios.rows.add(conceptos.orders).draw();  
+
+        }
+        
+        $('#listaPreciosTable tbody').on('click', 'tr', function() {
+
+            var datosFila = tablaPrecios.row(this).data();
+            var indiceFila = tablaPrecios.row(this).index();
+
+            $('#modalModificarPrecio').data(datosFila);
+
+        });
+
+
+        $('input.CurrencyInput').on('blur', function() {
+            const value = this.value.replace(/,/g, '');
+            this.value = parseFloat(value).toLocaleString('en-US', {
+                style: 'decimal',
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2
+            });
+        });
+
+        $('#modificarPrecioForm').on('submit',async function(event) {
+
+            event.preventDefault();
+
+            const data = $('#modalModificarPrecio').data();
+
+            const precio_pago = $('#nuevo_precio').val()
+            
+            await $.post('/gimnasio/actualizar/precio',{id:data.id, precio_pago});
+
+            $('#modalModificarPrecio').modal('hide');
+
+            $('#nuevo_precio').val('');
+
+            obtenerConceptos();
+            
+        });
+
+
+
+
+
+
+        
+    })
+
+
+    
+
+
+</script>

@@ -157,8 +157,10 @@
                                         <i class="material-icons">add</i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="addDropdownLink">
-                                        <li><a class="dropdown-item" href="#">Identificar usuario</a></li>
                                         <li><a class="dropdown-item" onclick="agregarUsuarioEjs()">Agregar usuario</a></li>
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#usuarioReconocido01">Usuario al corriente</a></li>
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#usuarioReconocido02">Usuario en días de pago</a></li>
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#usuarioReconocido03">Usuario con adeudo</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown hidden-on-mobile">
@@ -320,6 +322,64 @@
                 <div class="content-wrapper">
                     <div class="container">
                         
+                        <!-- MODAL ELIMINAR USUARIO -->
+
+                        <div class="modal fade modalReconocimiento" id="usuarioReconocido01" tabindex="-1" aria-labelledby="usuarioReconocido01Label" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header  alert-success ">
+                                        <h4 class="modal-title" id="usuarioReconocido01Label">Miguel Angel Carranza</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>¡Bienvenido!</h5>
+                                        <h5>Todo parece estar al corriente</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Aceptar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade modalReconocimiento" id="usuarioReconocido02" tabindex="-1" aria-labelledby="usuarioReconocido02Label" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header  alert-warning ">
+                                        <h4 class="modal-title" id="usuarioReconocido02Label">Guillermo Arellano</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>¡Bienvenido!</h5>
+                                        <h5>Tu fecha de renovación es en [X] días</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Aceptar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade modalReconocimiento" id="usuarioReconocido03" tabindex="-1" aria-labelledby="usuarioReconocido03Label" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header  alert-danger ">
+                                        <h4 class="modal-title" id="usuarioReconocido03Label">José Ramos</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Parece que hay un retraso en el pago</h5>
+                                        <h5>Tienes [X] días de retraso en su pago</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-primary">Registrar pago</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Aceptar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <%- body %>
                         
                     </div>

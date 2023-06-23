@@ -52,7 +52,67 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
 
 });
 
+const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, res, next) {
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+
+    const insertStatement = db.prepare('INSERT INTO conceptos (secuencia, id, concepto_pago, precio_pago) VALUES (?, ?, ?, ?)');
+
+    const usuarios = [
+        { secuencia: 1,id: 'f109714f-563c-48ae-9df1-5ecc7e3236e1', concepto_pago: 'Inscripción', precio_pago: 0.00 },
+        { secuencia: 2,id: '9002cce4-ae35-48a9-96e9-90fb87ff7487', concepto_pago: 'Diario', precio_pago: 0.00 },
+        { secuencia: 3,id: 'd698cdcd-eb40-40de-a348-21d5c8cd23cd', concepto_pago: 'Semanal', precio_pago: 0.00 },
+        { secuencia: 4,id: '9f704126-6481-47ed-b2c4-d9a9795cc343', concepto_pago: 'Mensual', precio_pago: 0.00 },
+        { secuencia: 5,id: '98471aec-3835-4abc-baf7-fcdd407c6e09', concepto_pago: 'Bimestral', precio_pago: 0.00 },
+        { secuencia: 6,id: '4d0d79d8-37ce-471f-a135-362b881a5965', concepto_pago: 'Semestral', precio_pago: 0.00 },
+        { secuencia: 7,id: '5b9ee11f-21e5-4409-97d7-73a1664d80bc', concepto_pago: 'Anual', precio_pago: 0.00 }
+    ];secuencia: 1,
+
+    usuarios.forEach(usuario => {
+    insertStatement.run(usuario.secuencia, usuario.id, usuario.concepto_pago, usuario.precio_pago);
+    });
+
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const getConceptos = router.get('/gimnasio/obtener/conceptos', function(req, res, next) {
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+
+    let command = db.prepare('SELECT * FROM conceptos');
+    const orders = command.all();
+
+    res.send({state: "success" , orders});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, next) {
+
+    const {id, precio_pago} = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+
+    const stmt = db.prepare('UPDATE conceptos SET precio_pago = ? WHERE id = ?');
+    const result = stmt.run(precio_pago, id);
+
+    res.send({state: "success" , message: 'Precio actualizado con éxito'});
+
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
 // module.exports = router;
-module.exports = [
-    posts
-]
+module.exports = {
+    posts,
+    cambiarPrecio,
+    getConceptos,
+    setPrecio
+}
