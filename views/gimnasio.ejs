@@ -24,7 +24,7 @@
         <div class="section-body">
             <div class="d-flex justify-content-between">
                 <h3 class="pt-2">Promociones / descuentos</h3>
-                <button type="button" class="btn btn-primary">Agregar</button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc" class="btn btn-primary">Agregar</button>
             </div>
             <table id="listaPromosTable" class="display" style="width:100%">
                 <thead>
@@ -38,13 +38,13 @@
     </div>
 </div>
 
-<!--MODAL PARA -->
+<!--MODAL PARA MODIFICAR PRECIO DE LOS CONCEPTOS -->
 
 <div class="modal fade" id="modalModificarPrecio" tabindex="-1" aria-labelledby="modalModificarPrecioLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalModificarPrecioLabel">Modal title</h5>
+                <h5 class="modal-title" id="modalModificarPrecioLabel">Cambiar precio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -52,6 +52,55 @@
                     <div class="row">
                         <div class="mb-6 col-12">
                             <label for="nuevo_precio" class="form-label">Nuevo precio</label>
+                            <input type="number" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="modificarPrecioForm" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--MODAL PARA AGREGAR CUPONES / DESCUENTOS -->
+
+<div class="modal fade" id="modalAgregarDesc" tabindex="-1" aria-labelledby="modalAgregarDescLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarDescLabel">Agregar promoción / descuento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modificarPrecioForm">
+                    <div class="row">
+                        <div class="mb-2 col-12">
+                            <label for="nuevo_precio" class="form-label">Nombre</label>
+                            <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-2 col-6">
+                            <label for="nuevo_precio" class="form-label">Código</label>
+                            <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-2 col-6">
+                            <label for="nuevo_precio" class="form-label">Concepto</label>
+                            <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-2 col-6">
+                            <label for="nuevo_precio" class="form-label">Tipo</label>
+                            <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-2 col-6">
+                            <label for="nuevo_precio" class="form-label">Valor</label>
                             <input type="text" name="nuevo_precio" id="nuevo_precio" class="form-control CurrencyInput"
                                 aria-describedby="emailHelp">
                         </div>
@@ -88,7 +137,7 @@
                 { data: 'secuencia', title: 'secuencia', visible: false },
                 { data: 'id', title: 'id', visible: false },
                 { data: 'concepto_pago', title: 'Concepto', width: '60%', visible: true },
-                { data: 'precio_pago', title: 'Precio', orderable: false, width: '25%' },
+                { data: 'precioFormatted', title: 'Precio', orderable: false, width: '25%' },
                 { title: '', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsNP , width: '15%' },
             ],
             autoWidth: false,
@@ -138,7 +187,14 @@
 
             console.log({conceptos});
 
-            tablaPrecios.rows.add(conceptos.orders).draw();  
+            nuevasRows = [];
+
+            conceptos.orders.forEach(row => {
+                row.precioFormatted = `$ ${row.precio_pago}`;
+                nuevasRows.push(row)
+            });
+
+            tablaPrecios.rows.add(nuevasRows).draw();  
 
         }
         
@@ -149,16 +205,6 @@
 
             $('#modalModificarPrecio').data(datosFila);
 
-        });
-
-
-        $('input.CurrencyInput').on('blur', function() {
-            const value = this.value.replace(/,/g, '');
-            this.value = parseFloat(value).toLocaleString('en-US', {
-                style: 'decimal',
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2
-            });
         });
 
         $('#modificarPrecioForm').on('submit',async function(event) {
@@ -177,6 +223,11 @@
 
             obtenerConceptos();
             
+        });
+
+        $('#modalModificarPrecio').on('show.bs.modal', function() {
+            console.log('asd');
+            $('#nuevo_precio').val('');
         });
 
 
