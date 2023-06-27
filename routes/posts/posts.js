@@ -60,12 +60,12 @@ const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, re
 
     const usuarios = [
         { secuencia: 1,id: 'f109714f-563c-48ae-9df1-5ecc7e3236e1', concepto_pago: 'Inscripción', precio_pago: 0.00 },
-        { secuencia: 2,id: '9002cce4-ae35-48a9-96e9-90fb87ff7487', concepto_pago: 'Diario', precio_pago: 0.00 },
-        { secuencia: 3,id: 'd698cdcd-eb40-40de-a348-21d5c8cd23cd', concepto_pago: 'Semanal', precio_pago: 0.00 },
-        { secuencia: 4,id: '9f704126-6481-47ed-b2c4-d9a9795cc343', concepto_pago: 'Mensual', precio_pago: 0.00 },
-        { secuencia: 5,id: '98471aec-3835-4abc-baf7-fcdd407c6e09', concepto_pago: 'Bimestral', precio_pago: 0.00 },
-        { secuencia: 6,id: '4d0d79d8-37ce-471f-a135-362b881a5965', concepto_pago: 'Semestral', precio_pago: 0.00 },
-        { secuencia: 7,id: '5b9ee11f-21e5-4409-97d7-73a1664d80bc', concepto_pago: 'Anual', precio_pago: 0.00 }
+        { secuencia: 2,id: '9002cce4-ae35-48a9-96e9-90fb87ff7487', concepto_pago: 'Día', precio_pago: 0.00 },
+        { secuencia: 3,id: 'd698cdcd-eb40-40de-a348-21d5c8cd23cd', concepto_pago: 'Semana', precio_pago: 0.00 },
+        { secuencia: 4,id: '9f704126-6481-47ed-b2c4-d9a9795cc343', concepto_pago: 'Mes', precio_pago: 0.00 },
+        { secuencia: 5,id: '98471aec-3835-4abc-baf7-fcdd407c6e09', concepto_pago: 'Bimestre', precio_pago: 0.00 },
+        { secuencia: 6,id: '4d0d79d8-37ce-471f-a135-362b881a5965', concepto_pago: 'Semestre', precio_pago: 0.00 },
+        { secuencia: 7,id: '5b9ee11f-21e5-4409-97d7-73a1664d80bc', concepto_pago: 'Año', precio_pago: 0.00 }
     ];secuencia: 1,
 
     usuarios.forEach(usuario => {

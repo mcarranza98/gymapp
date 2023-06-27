@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-6">
+    <div class="col-4">
         <div class="section-body">
             <h3 class="pt-2">Lista de precios</h3>
             <table id="listaPreciosTable" class="display" style="width:100%">
@@ -20,7 +20,7 @@
             </table>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-8">
         <div class="section-body">
             <div class="d-flex justify-content-between">
                 <h3 class="pt-2">Promociones / descuentos</h3>
@@ -159,8 +159,8 @@
             columns: [
                 { data: 'secuencia', title: 'secuencia', visible: false },
                 { data: 'id', title: 'id', visible: false },
-                { data: 'concepto_pago', title: 'Concepto', width: '60%', visible: true },
-                { data: 'precioFormatted', title: 'Precio', orderable: false, width: '25%' },
+                { data: 'concepto_pago', title: 'Concepto', width: '50%', visible: true },
+                { data: 'precioFormatted', title: 'Precio', orderable: false, width: '35%' },
                 { title: '', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsNP, width: '15%' },
             ],
             autoWidth: false,
@@ -190,10 +190,11 @@
             },
             dom: 'lrt',
             columns: [
-                { data: 'nombre_descuento', title: 'Nombre', width: '50%', visible: true },
-                { data: 'tipo_descuento', title: 'Tipo', orderable: false, width: '25%' },
-                { data: 'valor_descuento', title: 'Valor', orderable: false, width: '25%' },
-                { title: 'Opciones', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsPD, width: '25%' },
+                { data: 'nombre_descuento', title: 'Nombre', width: '40%', visible: true },
+                { data: 'codigo_descuento', title: 'Código', width: '20%', visible: true },
+                { data: 'tipo_descuento', title: 'Tipo', orderable: false, width: '15%' },
+                { data: 'valor_descuento', title: 'Valor', orderable: false, width: '15%' },
+                { class: 'details-control', orderable: false, data: null, defaultContent: action_iconsPD, width: '10%' },
             ],
             autoWidth: false,
             search: {
