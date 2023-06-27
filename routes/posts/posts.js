@@ -109,10 +109,109 @@ const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, 
 
 });
 
+
+const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
+
+    const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento} = req.body
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+
+    const command = `INSERT INTO descuentos(id, codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento) 
+                    VALUES(@id, @codigo_descuento, @concepto_descuento, @nombre_descuento, @tipo_descuento, @valor_descuento)`;
+                            
+    const insert = db.prepare(command);
+    
+    const insertDescuento = db.transaction((config) => {
+        
+        insert.run(config);
+
+        res.send({state: "success" , message : "Descuento agregado exitosamente."});
+
+    });
+    
+    const uuid = uuidv4();
+
+    const datosDescuento = {
+        id: uuid,
+        codigo_descuento: codigo_descuento,
+        concepto_descuento: concepto_descuento,
+        nombre_descuento: nombre_descuento,
+        tipo_descuento: tipo_descuento,
+        valor_descuento: valor_descuento,
+    };
+    
+    insertDescuento(datosDescuento);
+
+    db.close();
+
+});
+
+const getDescuentos = router.get('/gimnasio/obtener/descuentos', function(req, res, next) {
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+    let command = db.prepare('SELECT * FROM descuentos');
+    const desc = command.all();
+
+    res.send({state: "success" , desc});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const eliminarDescuentos = router.post('/gimnasio/eliminar/descuentos', function(req, res, next) {
+
+    const { id } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+    const stmt = db.prepare('DELETE FROM descuentos WHERE id = ?');
+    const result = stmt.run(id);
+
+    if (result.changes > 0) {
+        res.send({state: "success" , message:'Se eliminó el descuento'});
+    } else {
+        res.send({state: "warning" , message:'Ocurrio un problema elimando el descuento'});
+    }
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const eliminarUsuario = router.post('/usuarios/eliminar/', function(req, res, next) {
+
+    const { id } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    const stmt = db.prepare('DELETE FROM usuarios WHERE id = ?');
+    const result = stmt.run(id);
+
+    if (result.changes > 0) {
+        res.send({state: "success" , message:'Se eliminó el usuario'});
+    } else {
+        res.send({state: "warning" , message:'Ocurrio un problema elimando el usuario'});
+    }
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
 // module.exports = router;
 module.exports = {
     posts,
     cambiarPrecio,
     getConceptos,
-    setPrecio
+    setPrecio,
+    agregarDesc,
+    getDescuentos,
+    eliminarDescuentos,
+    eliminarUsuario
 }

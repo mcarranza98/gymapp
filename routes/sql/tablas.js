@@ -42,3 +42,19 @@ const initPagos = `CREATE TABLE IF NOT EXISTS conceptos (
 db_gimnasio.prepare(initPagos).run();
 
 db_gimnasio.close();
+
+
+const db_descuentos = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+const initPromos = `CREATE TABLE IF NOT EXISTS descuentos (
+                        id TEXT NOT NULL,
+                        nombre_descuento TEXT NOT NULL,
+                        codigo_descuento TEXT NOT NULL,
+                        concepto_descuento TEXT NOT NULL,
+                        tipo_descuento TEXT NOT NULL, 
+                        valor_descuento TEXT NOT NULL
+                        )`;
+
+db_descuentos.prepare(initPromos).run();
+
+db_descuentos.close();

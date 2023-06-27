@@ -141,7 +141,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">No, cancelar.</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Sí, eliminar.</button>
+                <button type="button" id="btnEliminarUsuario" class="btn btn-danger" data-bs-dismiss="modal">Sí, eliminar.</button>
             </div>
         </div>
     </div>
@@ -198,7 +198,7 @@
                             <h5>Total</h5>
                         </div>
                         <div class="col-4">
-                            <h4 id="totalCobro" class="text-success" >$1198.00</h4>
+                            <h4 id="totalCobro" class="text-success">$1198.00</h4>
                         </div>
                     </div>
                 </div>
@@ -589,7 +589,32 @@
 
         }
 
+        $('#usuariosTable tbody').on('click', 'tr', function () {
 
+            var datosFila = tablaUsuarios.row(this).data();
+            var indiceFila = tablaUsuarios.row(this).index();
+
+            $('#eliminarUsuario').data(datosFila);
+
+        });
+
+        $("#btnEliminarUsuario").click( async function(){
+
+            let datos = $('#eliminarUsuario').data();
+
+            const delDesc = await asyncPostAjax('/usuarios/eliminar/', { id:datos.id });
+
+
+            if (delDesc.state = 'success') {
+
+                showNotification(delDesc.state, delDesc.message);
+                resetTablaUsuarios();
+
+            }
+
+            console.log({datos});
+
+        });
 
 
 
