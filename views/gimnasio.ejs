@@ -72,7 +72,7 @@
 <!--MODAL PARA AGREGAR CUPONES / DESCUENTOS -->
 
 <div class="modal fade" id="modalAgregarDesc" tabindex="-1" aria-labelledby="modalAgregarDescLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalAgregarDescLabel">Agregar promoción / descuento</h5>
@@ -93,13 +93,28 @@
                         </div>
                         <div class="mb-2 col-6">
                             <label for="concepto_descuento" class="form-label">Concepto</label>
-                            <input type="text" name="concepto_descuento" id="concepto_descuento"
-                                class="form-control CurrencyInput" aria-describedby="emailHelp">
+                            <select class="form-select" id="concepto_descuento" name="concepto_descuento"
+                                aria-label="Selecciona la modalidad">
+                                <option value="default" selected>Selecciona el concepto</option>
+                                <option value="inscripcion">Inscripción</option>
+                                <option value="todos_conceptos">Todos los reingresos (Sólo aplica porcentaje)</option>
+                                <option value="diario">Día</option>
+                                <option value="semanal">Semana</option>
+                                <option value="mensual">Mes</option>
+                                <option value="bimestral">Bimestre</option>
+                                <option value="semestral">Semestre</option>
+                                <option value="anual">Año</option>
+                            </select>
                         </div>
                         <div class="mb-2 col-6">
                             <label for="tipo_descuento" class="form-label">Tipo</label>
-                            <input type="text" name="tipo_descuento" id="tipo_descuento"
-                                class="form-control CurrencyInput" aria-describedby="emailHelp">
+                            <select class="form-select" id="tipo_descuento" name="tipo_descuento"
+                                aria-label="Selecciona la modalidad">
+                                <option value="default" selected>Selecciona el tipo de descuento</option>
+                                <option value="porcentaje">Porcentaje</option>
+                                <option value="precio_fijo">Precio fijo</option>
+                                <option value="descontar_cantidad">Descontar cantidad</option>
+                            </select>
                         </div>
                         <div class="mb-2 col-6">
                             <label for="valor_descuento" class="form-label">Valor</label>
@@ -238,6 +253,14 @@
 
         });
 
+        $('#modalModificarPrecio').on('shown.bs.modal', function () {
+
+            let data = $('#modalModificarPrecio').data();
+            console.log({data});
+            $('#nuevo_precio').val(data.precio_pago);
+
+        });
+
         $('#modificarPrecioForm').on('submit', async function (event) {
 
             event.preventDefault();
@@ -250,15 +273,8 @@
 
             $('#modalModificarPrecio').modal('hide');
 
-            $('#nuevo_precio').val('');
-
             obtenerConceptos();
 
-        });
-
-        $('#modalModificarPrecio').on('show.bs.modal', function () {
-            console.log('asd');
-            $('#nuevo_precio').val('');
         });
 
 

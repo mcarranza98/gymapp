@@ -70,7 +70,7 @@
 
                         <div class="mb-3 col-6">
                             <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="text" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
+                            <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
                                 id="fechaPago">
                         </div>
 
@@ -92,7 +92,7 @@
                         </div>
 
                         <!--<div id="emailHelp" class="form-text">Ingresa la modalidad de pago antes de seleccionar la fecha</div>-->
-
+                        <!-- 
                         <hr class="mt-2">
 
                         <h5 class="mt-2">Facturación</h5>
@@ -112,9 +112,9 @@
                             </select>
                         </div>
                         <div class="mb-3 col-6">
-                            <label for="fecha_pago" class="form-label">Fecha de pago</label>
-                            <input type="text" name="fecha_pago" id="fecha_pago" class="form-control" id="fechaPago">
-                        </div>
+                            <label for="fecha_ingreso" class="form-label">Fecha de pago</label>
+                            <input type="text" name="fecha_ingreso" id="fecha_ingreso" class="form-control" id="fechaPago">
+                        </div>-->
                     </div>
                 </form>
             </div>
@@ -158,34 +158,34 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="agregarUsuarioForm">
+                <form id="pagoUsuario">
                     <div class="row">
                         <div class="mb-3 col-7">
                             <label for="modalidad" class="form-label">Modalidad de pago</label>
-                            <select class="form-select" id="modalidad" name="modalidad"
+                            <select class="form-select" id="selectModalidadPago" name="pago_modalidad"
                                 aria-label="Selecciona la modalidad">
                                 <option value="default" selected>Selecciona la modalidad</option>
-                                <option value="diario">Diario</option>
-                                <option value="semanal">Semanal</option>
-                                <option value="mensual">Mensual</option>
-                                <option value="bimestral">Bimestral</option>
-                                <option value="semestral">Semestral</option>
-                                <option value="anual">Anual</option>
+                                <option value="9002cce4-ae35-48a9-96e9-90fb87ff7487">Día</option>
+                                <option value="d698cdcd-eb40-40de-a348-21d5c8cd23cd">Semana</option>
+                                <option value="9f704126-6481-47ed-b2c4-d9a9795cc343">Mes</option>
+                                <option value="98471aec-3835-4abc-baf7-fcdd407c6e09">Bimestre</option>
+                                <option value="4d0d79d8-37ce-471f-a135-362b881a5965">Semestre</option>
+                                <option value="5b9ee11f-21e5-4409-97d7-73a1664d80bc">Año</option>
                             </select>
                         </div>
                         <div class="mb-3 col-5">
-                            <label for="asd" class="form-label">Fecha de pago</label>
-                            <input type="date" name="asd" id="fecha_pago" class="form-control" id="fechaPago">
+                            <label for="fecha_ingreso" class="form-label">Fecha de pago</label>
+                            <input type="date" name="fecha_de_pago" class="form-control" id="fechaPago">
                         </div>
                         <div class="mb-3 col-7">
-                            <label for="input_descuento" class="form-label">Código de descuento</label>
-                            <input type="text" name="input_descuento" id="input_descuento" class="form-control"
+                            <label for="descuentos_aplicados" class="form-label">Código de descuento</label>
+                            <input type="text" name="descuentos_aplicados" id="descuentos_aplicados" class="form-control"
                                 aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3 mt-5 col-5">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
-                                <label class="form-check-label" for="flexCheckIndeterminate">
+                                <input class="form-check-input" name="pago_inscripcion" type="checkbox" value="f109714f-563c-48ae-9df1-5ecc7e3236e1" id="checkInscripcionPago">
+                                <label class="form-check-label" for="checkInscripcionPago">
                                   Inscripción
                                 </label>
                             </div>
@@ -198,26 +198,26 @@
                             <h5>Inscripción</h5>
                         </div>
                         <div class="col-4">
-                            <h4 id="totalCobro">$599.00</h4>
+                            <h4 id="precioInscripcion">$00.00</h4>
                         </div>
                         <div class="col-6">
                             <h5>Modalidad</h5>
                         </div>
                         <div class="col-4">
-                            <h4 id="totalCobro">$599.00</h4>
+                            <h4 id="precioModalidad">$00.00</h4>
                         </div>
                         <div class="col-6">
                             <h5>Total</h5>
                         </div>
                         <div class="col-4">
-                            <h4 id="totalCobro" class="text-success">$1198.00</h4>
+                            <h4 id="totalCobro" class="text-success">$00.00</h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Guardar</button>
+                <button type="submit" form="pagoUsuario" class="btn btn-success">Guardar</button>
             </div>
         </div>
     </div>
@@ -261,9 +261,9 @@
             columns: [
 
                 { data: 'nombre_usuario', title: 'Nombre', width: '30%' },
-                { data: 'modalidad', title: 'Modalidad', width: '15%' },
+                { data: 'modalidad_actual', title: 'Modalidad', width: '15%' },
                 { data: 'sig_pago', title: 'Sig. Pago', orderable: false, width: '15%' },
-                { data: 'sig_pago_timestamp', title: 'Adeudo', orderable: false, width: '20%' },
+                //{ data: 'sig_pago_timestamp', title: 'Adeudo', orderable: false, width: '20%' },
                 { title: 'Opciones', class: 'details-control', orderable: false, defaultContent: action_iconsNP, data: null, width: '20%' },
             ],
             autoWidth: false,
@@ -315,21 +315,25 @@
                 const $form = $("#agregarUsuarioForm");
                 const data = getFormData($form);
 
-                const fecha_pago_timestamp = toTimestamp(data.fecha_pago);
-                data.fecha_pago_timestamp = fecha_pago_timestamp;
+                let today = Date.now();
+                let todayFormat = toDate(today);
 
-                const { sig_pago, sig_pago_timestamp } = sigPago(data.modalidad, fecha_pago_timestamp);
+                const fecha_ingreso_timestamp = toTimestamp(todayFormat);
+                
+                data.fecha_ingreso_timestamp = fecha_ingreso_timestamp;
 
-                data.sig_pago = sig_pago;
-                data.sig_pago_timestamp = sig_pago_timestamp;
+                //const { sig_pago, sig_pago_timestamp } = sigPago(data.modalidad, fecha_ingreso_timestamp);
 
-                console.log({ data })
-
-                console.log()
+                data.fecha_ingreso = todayFormat;
+                data.sig_pago = todayFormat;
+                data.sig_pago_timestamp = fecha_ingreso_timestamp;
+                data.modalidad_actual = 'Sin definir';
 
                 try {
 
+                    console.log({data});
                     const postUser = await asyncPostAjax('/usuarios/agregar', data);
+
 
 
                     if (postUser.state = 'success') {
@@ -356,28 +360,94 @@
         });
 
 
-        $(function () {
-            $('input[name="fecha_pago"]').daterangepicker({
-                startDate: moment(),
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 2020,
-                maxYear: 2030
-            }, function (start, end, label) {
-                var years = moment().diff(start, 'years');
-            });
+        $('#selectModalidadPago').change(async function() {
+            // This code will be executed when the value of the select element changes
+            var selectedValue = $(this).val();
 
-            $('input[name="fecha_nacimiento"]').daterangepicker({
-                startDate: moment(),
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 1900,
-                maxYear: 2020
-            }, function (start, end, label) {
-                var years = moment().diff(start, 'years');
-            });
+            const precioConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:selectedValue });
+
+            let precio = precioConcepto.concepto.precio_pago;
+
+            $('#precioModalidad').html(`$${precio.toFixed(2)}`);
+
+            sumarPago()
+
         });
 
+        $('#checkInscripcionPago').change(async function() {
+            if ($(this).is(':checked')) {
+                
+                let value = $(this).val();
+                const precioConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:value });
+
+                let precio = precioConcepto.concepto.precio_pago;
+
+                $('#precioInscripcion').html(`$${precio.toFixed(2)}`);
+
+                sumarPago()
+
+            } else {
+
+                $('#precioInscripcion').html(`$00.00`);
+
+                sumarPago()
+            }
+        });
+
+        function sumarPago(){
+
+            let precioModalidad = $('#precioModalidad').text();
+            let precioInscripcion = $('#precioInscripcion').text();
+
+                precioModalidad = parseFloat(precioModalidad.split('$')[1]);
+                precioInscripcion = parseFloat(precioInscripcion.split('$')[1]);
+
+            let precioTotal = precioInscripcion + precioModalidad;
+
+            $('#totalCobro').html(`$${precioTotal.toFixed(2)}`);
+
+        }
+
+
+        $('#pagoUsuario').submit(async function (event) {
+            event.preventDefault();
+
+
+            const $form = $("#pagoUsuario");
+            const data = getFormData($form);
+
+            if( data.pago_inscripcion ){
+
+                data.pago_inscripcion = true;
+
+            }
+
+            if( data.pago_modalidad ){
+
+                const tipoConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:data.pago_modalidad });
+
+                let precio = tipoConcepto.concepto.concepto_pago;
+
+                data.pago_concepto = precio;
+
+            }
+
+            let precioModalidad = $('#precioModalidad').text();
+            let precioInscripcion = $('#precioInscripcion').text();
+            let precioTotal = $('#totalCobro').text();
+            
+            data.precioModalidad = precioModalidad;
+            data.precioInscripcion = precioInscripcion;
+            data.precioTotal = precioTotal;
+
+            let dataModal = $('#registrarPago').data();
+            console.log({dataModal});
+
+            data.id_usuario = dataModal.id;
+
+            console.log({data});
+
+        });
 
         //FUNCIONES GLOBALES
 
@@ -438,11 +508,13 @@
 
         }
 
+        
+
         function toTimestamp(fecha) {
             // Obtener los componentes de la fecha
             const partesFecha = fecha.split('/');
-            const dia = partesFecha[1];
-            const mes = partesFecha[0] - 1; // Los meses en JavaScript comienzan desde 0 (enero es 0, febrero es 1, etc.)
+            const dia = partesFecha[0];
+            const mes = partesFecha[1] - 1; // Los meses en JavaScript comienzan desde 0 (enero es 0, febrero es 1, etc.)
             const anio = partesFecha[2];
 
             // Crear un objeto de fecha
@@ -464,7 +536,7 @@
             const anio = fechaObjeto.getFullYear();
 
             // Formatear la fecha como DD/MM/YYYY
-            const fechaFormateada = `${mes}/${dia}/${anio}`;
+            const fechaFormateada = `${dia}/${mes}/${anio}`;
 
             return fechaFormateada;
         }
@@ -565,9 +637,9 @@
             $('#telefono_contacto').val('');
             $('#radio_sexo1').prop('checked', false);
             $('#radio_sexo2').prop('checked', false);
-            $('#modalidad').val('default');
-            $('#fecha_pago').data('daterangepicker').setStartDate(moment());
-            $('#fecha_nacimiento').data('daterangepicker').setStartDate(moment());
+            //$('#modalidad').val('default');
+            //$('#fecha_ingreso').data('daterangepicker').setStartDate(moment());
+            //$('#fecha_nacimiento').data('daterangepicker').setStartDate(moment());
 
         }
 
@@ -584,11 +656,11 @@
             }
 
 
-            console.log($('#modalidad').val());
+            /*console.log($('#modalidad').val());
             if ($('#modalidad').val() == 'default') {
                 isValidado = false;
                 mensajeValidacion = 'Debes de llenar todos los campos personales y de facturación.'
-            }
+            }*/
 
 
             if ($('#nombre_usuario').val() == '' || $('#nombre_usuario').val() == '') {
@@ -607,6 +679,8 @@
             var indiceFila = tablaUsuarios.row(this).index();
 
             $('#eliminarUsuario').data(datosFila);
+            $('#registrarPago').data(datosFila);
+            
 
         });
 

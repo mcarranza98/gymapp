@@ -18,9 +18,9 @@ const initOrders = `CREATE TABLE IF NOT EXISTS usuarios (
                     fecha_nacimiento TEXT NOT NULL,
                     nombre_contacto TEXT,
                     telefono_contacto INTEGER,
-                    modalidad TEXT NOT NULL,
-                    fecha_pago TEXT NOT NULL,
-                    fecha_pago_timestamp INTEGER NOT NULL,
+                    modalidad_actual TEXT NOT NULL,
+                    fecha_ingreso TEXT NOT NULL,
+                    fecha_ingreso_timestamp INTEGER NOT NULL,
                     sig_pago TEXT NOT NULL,
                     sig_pago_timestamp INTEGER NOT NULL
                     )`;

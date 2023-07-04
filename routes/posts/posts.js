@@ -8,13 +8,13 @@ const { v4: uuidv4 } = require('uuid');
 
 const posts = router.post('/usuarios/agregar', function(req, res, next) {
 
-    const {nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad, fecha_pago, fecha_pago_timestamp, sig_pago, sig_pago_timestamp} = req.body
+    const {nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp} = req.body
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
 
 
-    const command = `INSERT INTO usuarios(id, nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad, fecha_pago, fecha_pago_timestamp, sig_pago, sig_pago_timestamp) 
-                    VALUES(@id, @nombre_usuario, @telefono_usuario, @radio_sexo, @fecha_nacimiento, @nombre_contacto, @telefono_contacto, @modalidad, @fecha_pago, @fecha_pago_timestamp, @sig_pago, @sig_pago_timestamp)`;
+    const command = `INSERT INTO usuarios(id, nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp) 
+                    VALUES(@id, @nombre_usuario, @telefono_usuario, @radio_sexo, @fecha_nacimiento, @nombre_contacto, @telefono_contacto, @modalidad_actual, @fecha_ingreso, @fecha_ingreso_timestamp, @sig_pago, @sig_pago_timestamp)`;
                             
     const insert = db.prepare(command);
     
@@ -36,15 +36,14 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
         fecha_nacimiento: fecha_nacimiento,
         nombre_contacto: nombre_contacto,
         telefono_contacto: telefono_contacto,
-        modalidad: modalidad,
-        modalidad: modalidad,
-        fecha_pago: fecha_pago,
-        fecha_pago_timestamp: fecha_pago_timestamp,
+        modalidad_actual: modalidad_actual,
+        fecha_ingreso: fecha_ingreso,
+        fecha_ingreso_timestamp: fecha_ingreso_timestamp,
         sig_pago: sig_pago,
         sig_pago_timestamp: sig_pago_timestamp,
     };
      
-    //console.log(uuid);
+    console.log({datosUsuario});
     
     insertUsuario(datosUsuario);
 
@@ -86,6 +85,22 @@ const getConceptos = router.get('/gimnasio/obtener/conceptos', function(req, res
     const orders = command.all();
 
     res.send({state: "success" , orders});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+const getPrecioConcepto = router.post('/gimnasio/concepto/info', function(req, res, next) {
+
+    const {id} = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+
+    let command = db.prepare('SELECT * FROM conceptos WHERE id = ?');
+    const concepto = command.get(id);
+
+    res.send({state: "success" , concepto});
     
     // Cerrar la conexión a la base de datos
     db.close();
@@ -213,5 +228,6 @@ module.exports = {
     agregarDesc,
     getDescuentos,
     eliminarDescuentos,
-    eliminarUsuario
+    eliminarUsuario,
+    getPrecioConcepto
 }
