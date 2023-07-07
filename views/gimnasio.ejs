@@ -3,40 +3,81 @@
         <div class="page-description d-flex justify-content-between">
             <h1>Gimnasio</h1>
         </div>
-
     </div>
 </div>
 <div class="row">
-    <div class="col-4">
-        <div class="section-body">
-            <h3 class="pt-2">Lista de precios</h3>
-            <table id="listaPreciosTable" class="display" style="width:100%">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="section-body">
-            <div class="d-flex justify-content-between">
-                <h3 class="pt-2">Promociones / descuentos</h3>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
-                    class="btn btn-primary">Agregar</button>
+
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Precios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Descuentos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Historial pagos</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-body">
+                        <h3 class="pt-2">Lista de precios</h3>
+                        <table id="listaPreciosTable" class="display" style="width:100%">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <table id="listaPromosTable" class="display" style="width:100%">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-body">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="pt-2">Promociones / descuentos</h3>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
+                                class="btn btn-primary">Agregar</button>
+                        </div>
+                        <table id="listaPromosTable" class="display" style="width:100%">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-body">
+                        <h3 class="pt-2">Historial de pagos</h3>
+                        <table id="historialPagosTable" class="display" style="width:100%">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    
+    
 </div>
 
 <!--MODAL PARA MODIFICAR PRECIO DE LOS CONCEPTOS -->
@@ -225,6 +266,32 @@
 
         obtenerDescuentos();
 
+        var tablaPagos = $('#historialPagosTable').DataTable({
+            "initComplete": function (settings, json) {
+
+
+            },
+            dom: 'lrt',
+            columns: [
+                { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
+                { data: 'pago_concepto', title: 'Concepto', width: '30%', visible: true },
+                { data: 'pago_inscripcion_text', title: 'Inscripción', width: '25%', visible: true },
+                { data: 'precio_total', title: 'Total', orderable: true, width: '25%' }
+            ],
+            autoWidth: false,
+            search: {
+                return: true,
+            },
+            info: false,
+            paging: false,
+            targets: 'no-sort',
+            bSort: true,
+            order: [[0, 'asc']],
+
+        });
+
+        obtenerPagos()
+
         async function obtenerConceptos() {
 
             tablaPrecios.clear().draw()
@@ -343,9 +410,48 @@
         });
 
 
+        async function obtenerPagos() {
+
+            tablaPagos.clear().draw()
+
+            var pagos = await $.get('/gimnasio/obtener/pagos');
+
+            console.log({ pagos });
+
+            nuevasRows = [];
+
+            pagos.orders.forEach(row => {
+
+                if(row.pago_inscripcion == 'true'){
+                    row.pago_inscripcion_text = 'Sí'
+                }else{
+                    row.pago_inscripcion_text = 'No'
+                }
+
+                row.fecha = toDate(row.fecha_pago);
+
+                nuevasRows.push(row)
+            });
+
+            tablaPagos.rows.add(nuevasRows).draw();
+
+        }
 
 
+        function toDate(timestamp) {
+            // Crear un objeto de fecha a partir del timestamp en milisegundos
+            const fechaObjeto = new Date(timestamp);
 
+            // Obtener los componentes de la fecha
+            const dia = String(fechaObjeto.getDate()).padStart(2, '0'); // Agregar ceros a la izquierda si el día es menor a 10
+            const mes = String(fechaObjeto.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0 a 11, se suma 1 y se agregan ceros a la izquierda si el mes es menor a 10
+            const anio = fechaObjeto.getFullYear();
+
+            // Formatear la fecha como DD/MM/YYYY
+            const fechaFormateada = `${dia}/${mes}/${anio}`;
+
+            return fechaFormateada;
+        }
 
 
 

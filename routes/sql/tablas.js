@@ -32,14 +32,14 @@ db_main.close();
 
 const db_gimnasio = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
 
-const initPagos = `CREATE TABLE IF NOT EXISTS conceptos (
+const initGimnasio = `CREATE TABLE IF NOT EXISTS conceptos (
                         secuencia INTEGER NOT NULL,
                         id TEXT NOT NULL,
                         concepto_pago TEXT NOT NULL, 
                         precio_pago NUMERIC NOT NULL
                     )`;
 
-db_gimnasio.prepare(initPagos).run();
+db_gimnasio.prepare(initGimnasio).run();
 
 db_gimnasio.close();
 
@@ -58,3 +58,25 @@ const initPromos = `CREATE TABLE IF NOT EXISTS descuentos (
 db_descuentos.prepare(initPromos).run();
 
 db_descuentos.close();
+
+
+const db_pagos = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+
+const initPagos = `CREATE TABLE IF NOT EXISTS pagos (
+                        id TEXT NOT NULL,
+                        descuentos_aplicados TEXT NOT NULL,
+                        fecha_pago INTEGER NOT NULL,
+                        id_usuario TEXT NOT NULL,
+                        pago_concepto TEXT NOT NULL, 
+                        pago_inscripcion TEXT NOT NULL,
+                        pago_modalidad TEXT NOT NULL,
+                        precio_inscripcion TEXT NOT NULL,
+                        precio_modalidad TEXT NOT NULL,
+                        precio_total TEXT NOT NULL, 
+                        descuento_inscripcion TEXT NOT NULL,
+                        descuento_modalidad TEXT NOT NULL
+                        )`;
+
+db_pagos.prepare(initPagos).run();
+
+db_pagos.close();

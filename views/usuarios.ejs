@@ -160,7 +160,7 @@
             <div class="modal-body">
                 <form id="pagoUsuario">
                     <div class="row">
-                        <div class="mb-3 col-7">
+                        <div class="mb-3 col-6">
                             <label for="modalidad" class="form-label">Modalidad de pago</label>
                             <select class="form-select" id="selectModalidadPago" name="pago_modalidad"
                                 aria-label="Selecciona la modalidad">
@@ -173,16 +173,16 @@
                                 <option value="5b9ee11f-21e5-4409-97d7-73a1664d80bc">Año</option>
                             </select>
                         </div>
-                        <div class="mb-3 col-5">
+                        <!--<div class="mb-3 col-5">
                             <label for="fecha_ingreso" class="form-label">Fecha de pago</label>
                             <input type="date" name="fecha_de_pago" class="form-control" id="fechaPago">
-                        </div>
-                        <div class="mb-3 col-7">
+                        </div>-->
+                        <div class="mb-3 col-6">
                             <label for="descuentos_aplicados" class="form-label">Código de descuento</label>
                             <input type="text" name="descuentos_aplicados" id="descuentos_aplicados" class="form-control"
                                 aria-describedby="emailHelp">
                         </div>
-                        <div class="mb-3 mt-5 col-5">
+                        <div class="mb-3 col-5">
                             <div class="form-check">
                                 <input class="form-check-input" name="pago_inscripcion" type="checkbox" value="f109714f-563c-48ae-9df1-5ecc7e3236e1" id="checkInscripcionPago">
                                 <label class="form-check-label" for="checkInscripcionPago">
@@ -360,6 +360,13 @@
         });
 
 
+        $('#agregarUsuario').on('hidden.bs.modal', function () {
+
+            limpiarAgregarUsuario();
+
+        });
+
+
         $('#selectModalidadPago').change(async function() {
             // This code will be executed when the value of the select element changes
             var selectedValue = $(this).val();
@@ -416,11 +423,7 @@
             const $form = $("#pagoUsuario");
             const data = getFormData($form);
 
-            if( data.pago_inscripcion ){
-
-                data.pago_inscripcion = true;
-
-            }
+            data.pago_inscripcion = data.pago_inscripcion ? 'true' : 'false';
 
             if( data.pago_modalidad ){
 
@@ -432,18 +435,40 @@
 
             }
 
-            let precioModalidad = $('#precioModalidad').text();
-            let precioInscripcion = $('#precioInscripcion').text();
-            let precioTotal = $('#totalCobro').text();
-            
-            data.precioModalidad = precioModalidad;
-            data.precioInscripcion = precioInscripcion;
-            data.precioTotal = precioTotal;
+            data.fecha_pago = Date.now();
+
+            data.precio_modalidad = $('#precioModalidad').text();
+            data.precio_inscripcion = $('#precioInscripcion').text();
+            data.precio_total = $('#totalCobro').text();
+            data.descuento_inscripcion = '$0.00';
+            data.descuento_modalidad = '$0.00';
 
             let dataModal = $('#registrarPago').data();
             console.log({dataModal});
 
             data.id_usuario = dataModal.id;
+
+
+            try {
+
+                console.log({data});
+                const postPago = await asyncPostAjax('/pagos/agregar', data);
+
+                if (postPago.state = 'success') {
+
+                    $('#registrarPago').modal('toggle');
+                    showNotification(postPago.state, postPago.message);
+                    //resetTablaUsuarios()
+
+                }
+
+                console.log(postPago);
+
+            } catch (e) {
+
+                console.log(e);
+
+            }
 
             console.log({data});
 

@@ -219,6 +219,68 @@ const eliminarUsuario = router.post('/usuarios/eliminar/', function(req, res, ne
 });
 
 
+const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
+
+    const {descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad} = req.body
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+
+
+    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad) 
+                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad)`;
+                            
+    const insert = db.prepare(command);
+    
+    const insertPago = db.transaction((config) => {
+        
+        insert.run(config);
+
+        res.send({state: "success" , message : "Pago agregado exitosamente."});
+
+    });
+    
+    const uuid = uuidv4();
+
+    const datosPago = {
+        id: uuid,
+        descuentos_aplicados: descuentos_aplicados,
+        fecha_pago: fecha_pago,
+        id_usuario: id_usuario,
+        pago_concepto: pago_concepto,
+        pago_inscripcion: pago_inscripcion,
+        pago_modalidad: pago_modalidad,
+        precio_inscripcion: precio_inscripcion,
+        precio_modalidad: precio_modalidad,
+        precio_total: precio_total,
+        descuento_inscripcion: descuento_inscripcion,
+        descuento_modalidad: descuento_modalidad,
+    };
+     
+    console.log({datosPago});
+    
+    insertPago(datosPago);
+
+    db.close();
+
+});
+
+
+const getPagos = router.get('/gimnasio/obtener/pagos', function(req, res, next) {
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+
+    let command = db.prepare('SELECT * FROM pagos');
+    const orders = command.all();
+
+    res.send({state: "success" , orders});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+
 // module.exports = router;
 module.exports = {
     posts,
@@ -229,5 +291,7 @@ module.exports = {
     getDescuentos,
     eliminarDescuentos,
     eliminarUsuario,
-    getPrecioConcepto
+    getPrecioConcepto,
+    agregarPago,
+    getPagos
 }
