@@ -77,3 +77,17 @@
 .modalReconocimiento h4{
     font-size: 25px;
 }
+
+.select2-container {
+    z-index: 9999 !important; /* Ajusta el valor según sea necesario */
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    opacity: 1;
+    background: #2269f5;
+    color: white;
+}
+
+.nav-item{
+    margin: 5px;
+}

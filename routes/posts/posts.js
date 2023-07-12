@@ -219,6 +219,23 @@ const eliminarUsuario = router.post('/usuarios/eliminar/', function(req, res, ne
 });
 
 
+const consultarUsuario = router.post('/usuarios/consultar/', function(req, res, next) {
+
+    const { id } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    let command = db.prepare('SELECT * FROM usuarios WHERE id=?');
+    const datos = command.get(id);
+
+    res.send({state: "success" , datos});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
 const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
 
     const {descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad} = req.body
@@ -293,5 +310,6 @@ module.exports = {
     eliminarUsuario,
     getPrecioConcepto,
     agregarPago,
-    getPagos
+    getPagos,
+    consultarUsuario
 }

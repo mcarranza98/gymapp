@@ -151,7 +151,7 @@
 <!-- MODAL REGISTRAR PAGO -->
 
 <div class="modal fade" id="registrarPago" tabindex="-1" aria-labelledby="registrarPagoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="registrarPagoLabel">Registrar pago</h5>
@@ -162,9 +162,9 @@
                     <div class="row">
                         <div class="mb-3 col-6">
                             <label for="modalidad" class="form-label">Modalidad de pago</label>
-                            <select class="form-select" id="selectModalidadPago" name="pago_modalidad"
+                            <select style="width: 100%;" class="form-select" id="selectModalidadPago" name="pago_modalidad"
                                 aria-label="Selecciona la modalidad">
-                                <option value="default" selected>Selecciona la modalidad</option>
+                                <option value=""></option>
                                 <option value="9002cce4-ae35-48a9-96e9-90fb87ff7487">Día</option>
                                 <option value="d698cdcd-eb40-40de-a348-21d5c8cd23cd">Semana</option>
                                 <option value="9f704126-6481-47ed-b2c4-d9a9795cc343">Mes</option>
@@ -179,8 +179,11 @@
                         </div>-->
                         <div class="mb-3 col-6">
                             <label for="descuentos_aplicados" class="form-label">Código de descuento</label>
-                            <input type="text" name="descuentos_aplicados" id="descuentos_aplicados" class="form-control"
-                                aria-describedby="emailHelp">
+                            <div>
+                                <select style="width: 100%" class="select2-codigos-descuentos" name="codigos_descuento[]" multiple="multiple">
+                                </select>
+                            </div>
+                            
                         </div>
                         <div class="mb-3 col-5">
                             <div class="form-check">
@@ -240,7 +243,49 @@
     $(document).ready(function () {
 
 
-        console.log(window.location);
+        //INICIALIZAR SELECT2
+        var select2Codigos = $('.select2-codigos-descuentos').select2();
+        var select2Modalidad = $('#selectModalidadPago').select2({
+            minimumResultsForSearch: Infinity,
+            placeholder: 'Selecciona una opción',
+            allowClear: true
+        });
+
+
+        obtenerDescuentos()
+
+        
+        async function obtenerDescuentos(){
+
+            var {desc} = await $.get('/gimnasio/obtener/descuentos');
+
+            console.log({ desc });
+
+            select2Codigos.empty();
+
+            for (var i = 0; i < desc.length; i++) {
+
+                var opcion = desc[i];
+                var optionElement = $('<option>').val(opcion.id).text(opcion.codigo_descuento);
+                select2Codigos.append(optionElement);
+
+            }
+
+        }
+
+        $('.select2-codigos-descuentos').on('select2:select', function (e) {
+
+            var opcionSeleccionada = e.params.data;
+            console.log('Opción seleccionada:', opcionSeleccionada);
+
+        });
+
+        $('.select2-codigos-descuentos').on('select2:unselect', function (e) {
+
+            var opcionSeleccionada = e.params.data;
+            console.log('Opción seleccionada:', opcionSeleccionada);
+
+        });
 
         busqueda = window.location.search;
 

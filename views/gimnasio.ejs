@@ -134,9 +134,9 @@
                         </div>
                         <div class="mb-2 col-6">
                             <label for="concepto_descuento" class="form-label">Concepto</label>
-                            <select class="form-select" id="concepto_descuento" name="concepto_descuento"
+                            <select style="width: 100%;" class="form-select" id="concepto_descuento" name="concepto_descuento"
                                 aria-label="Selecciona la modalidad">
-                                <option value="default" selected>Selecciona el concepto</option>
+                                <option value="" selected></option>
                                 <option value="inscripcion">Inscripción</option>
                                 <option value="todos_conceptos">Todos los reingresos (Sólo aplica porcentaje)</option>
                                 <option value="diario">Día</option>
@@ -149,9 +149,9 @@
                         </div>
                         <div class="mb-2 col-6">
                             <label for="tipo_descuento" class="form-label">Tipo</label>
-                            <select class="form-select" id="tipo_descuento" name="tipo_descuento"
+                            <select style="width: 100%;" class="form-select" id="tipo_descuento" name="tipo_descuento"
                                 aria-label="Selecciona la modalidad">
-                                <option value="default" selected>Selecciona el tipo de descuento</option>
+                                <option value="" selected></option>
                                 <option value="porcentaje">Porcentaje</option>
                                 <option value="precio_fijo">Precio fijo</option>
                                 <option value="descontar_cantidad">Descontar cantidad</option>
@@ -202,9 +202,21 @@
 
 
 
-    $(document).ready(function () {
+    $(document).ready(async function () {
 
 
+        //INIXIALIZAR SELECT2
+        var select2Concepto = $('#concepto_descuento').select2({
+            minimumResultsForSearch: Infinity,
+            placeholder: 'Selecciona una opción',
+            allowClear: true
+        });
+        
+        var select2Tipo = $('#tipo_descuento').select2({
+            minimumResultsForSearch: Infinity,
+            placeholder: 'Selecciona una opción',
+            allowClear: true
+        });
 
         var tablaPrecios = $('#listaPreciosTable').DataTable({
             "initComplete": function (settings, json) {
@@ -274,9 +286,10 @@
             dom: 'lrt',
             columns: [
                 { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
-                { data: 'pago_concepto', title: 'Concepto', width: '30%', visible: true },
-                { data: 'pago_inscripcion_text', title: 'Inscripción', width: '25%', visible: true },
-                { data: 'precio_total', title: 'Total', orderable: true, width: '25%' }
+                { data: 'nombre_usuario', title: 'Usuario', width: '35%', visible: true },
+                { data: 'pago_concepto', title: 'Concepto', width: '15%', visible: true },
+                { data: 'pago_inscripcion_text', title: 'Inscripción', width: '15%', visible: true },
+                { data: 'precio_total', title: 'Total', width: '15%', orderable: true }
             ],
             autoWidth: false,
             search: {
@@ -290,7 +303,7 @@
 
         });
 
-        obtenerPagos()
+        await obtenerPagos()
 
         async function obtenerConceptos() {
 
@@ -420,18 +433,24 @@
 
             nuevasRows = [];
 
-            pagos.orders.forEach(row => {
+            for (const row of pagos.orders) {
+
+                var dataUser = await $.post('/usuarios/consultar/', {id:row.id_usuario});
 
                 if(row.pago_inscripcion == 'true'){
                     row.pago_inscripcion_text = 'Sí'
                 }else{
                     row.pago_inscripcion_text = 'No'
                 }
+                row.nombre_usuario = dataUser.datos.nombre_usuario;
 
                 row.fecha = toDate(row.fecha_pago);
 
                 nuevasRows.push(row)
-            });
+
+            };
+
+            console.log({nuevasRows});
 
             tablaPagos.rows.add(nuevasRows).draw();
 
