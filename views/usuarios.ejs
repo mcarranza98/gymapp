@@ -480,6 +480,10 @@
 
             }
 
+            var valoresSeleccionados = $('.select2-codigos-descuentos').val();
+
+            data.descuentos_aplicados = JSON.stringify(valoresSeleccionados);
+
             data.fecha_pago = Date.now();
 
             data.precio_modalidad = $('#precioModalidad').text();

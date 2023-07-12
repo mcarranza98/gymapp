@@ -9,23 +9,54 @@
     <div class="col-12">
         <div class="card widget widget-stats">
             <div class="card-body">
-                <div class="widget-stats-container d-flex">
-                    <div class="widget-stats-icon widget-stats-icon-primary">
-                        <i class="material-icons-outlined">paid</i>
-                    </div>
-                    <div class="widget-stats-content flex-fill">
-                        <span class="widget-stats-title">Today's Sales</span>
-                        <span class="widget-stats-amount">$38,211</span>
-                        <span class="widget-stats-info">471 Orders Total</span>
-                    </div>
-                    <div class="widget-stats-indicator widget-stats-indicator-negative align-self-start">
-                        <i class="material-icons">keyboard_arrow_down</i> 4%
-                    </div>
-                </div>
+                <canvas id="miGrafico"></canvas>
             </div>
         </div>
     </div>
 </div>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
 
+
+
+<script>
+
+
+
+$(document).ready(async function () {
+
+    var ctx = document.getElementById('miGrafico').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
+        datasets: [{
+          label: 'Usuarios mensuales',
+          data: [140, 127, 155, 227],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+
+
+
+
+
+})
+
+
+
+
+
+
+
+</script>
