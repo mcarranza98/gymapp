@@ -442,7 +442,8 @@
                 }else{
                     row.pago_inscripcion_text = 'No'
                 }
-                row.nombre_usuario = dataUser.datos.nombre_usuario;
+                console.log({dataUser});
+                row.nombre_usuario = dataUser.datos ? dataUser.datos.nombre_usuario : row.nombre_usuario;
 
                 row.fecha = toDate(row.fecha_pago);
 

@@ -259,8 +259,6 @@
 
             var {desc} = await $.get('/gimnasio/obtener/descuentos');
 
-            console.log({ desc });
-
             select2Codigos.empty();
 
             for (var i = 0; i < desc.length; i++) {
@@ -276,21 +274,18 @@
         $('.select2-codigos-descuentos').on('select2:select', function (e) {
 
             var opcionSeleccionada = e.params.data;
-            console.log('Opción seleccionada:', opcionSeleccionada);
 
         });
 
         $('.select2-codigos-descuentos').on('select2:unselect', function (e) {
 
             var opcionSeleccionada = e.params.data;
-            console.log('Opción seleccionada:', opcionSeleccionada);
 
         });
 
         busqueda = window.location.search;
 
         if (busqueda == '?agregar-usuario') {
-            console.log('entra');
             var modal = new bootstrap.Modal(document.getElementById("agregarUsuario"));
             modal.show();
         }
@@ -333,15 +328,11 @@
 
             const { res } = await asyncGetAjax('/usuarios/cargar');
 
-            console.log({ res });
-
             const datosTabla = [];
 
             res.forEach(element => {
                 datosTabla.push(element);
             });
-
-            console.log({ datosTabla });
 
             tablaUsuarios.rows.add(datosTabla).draw();
         }
@@ -376,7 +367,6 @@
 
                 try {
 
-                    console.log({data});
                     const postUser = await asyncPostAjax('/usuarios/agregar', data);
 
 
@@ -389,8 +379,6 @@
                         resetTablaUsuarios()
 
                     }
-
-                    console.log(postUser);
 
                 } catch (e) {
 
@@ -464,43 +452,31 @@
         $('#pagoUsuario').submit(async function (event) {
             event.preventDefault();
 
-
             const $form = $("#pagoUsuario");
             const data = getFormData($form);
-
+            let dataModal = $('#registrarPago').data();
             data.pago_inscripcion = data.pago_inscripcion ? 'true' : 'false';
 
             if( data.pago_modalidad ){
-
                 const tipoConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:data.pago_modalidad });
-
                 let precio = tipoConcepto.concepto.concepto_pago;
-
                 data.pago_concepto = precio;
-
             }
 
             var valoresSeleccionados = $('.select2-codigos-descuentos').val();
-
             data.descuentos_aplicados = JSON.stringify(valoresSeleccionados);
-
             data.fecha_pago = Date.now();
-
             data.precio_modalidad = $('#precioModalidad').text();
             data.precio_inscripcion = $('#precioInscripcion').text();
             data.precio_total = $('#totalCobro').text();
             data.descuento_inscripcion = '$0.00';
             data.descuento_modalidad = '$0.00';
-
-            let dataModal = $('#registrarPago').data();
-            console.log({dataModal});
-
+            data.nombre_usuario = dataModal.nombre_usuario;
             data.id_usuario = dataModal.id;
 
 
             try {
 
-                console.log({data});
                 const postPago = await asyncPostAjax('/pagos/agregar', data);
 
                 if (postPago.state = 'success') {
@@ -509,17 +485,28 @@
                     showNotification(postPago.state, postPago.message);
                     //resetTablaUsuarios()
 
+                    //ACTUALIZAR LA INFORMACIÓN DEL USUARIO
+
+                    var infoSigPago = sigPago(data.pago_concepto, data.fecha_pago);
+
+                    var datosUser = {
+                        id: dataModal.id,
+                        modalidad_actual: data.pago_concepto,
+                        sig_pago: infoSigPago.sig_pago,
+                        sig_pago_timestamp: infoSigPago.sig_pago_timestamp
+                    }
+
+                    let actUser = await asyncPostAjax('/usuario/actualizar/pago', datosUser);
+
+                    resetTablaUsuarios()
                 }
 
-                console.log(postPago);
 
             } catch (e) {
 
                 console.log(e);
 
             }
-
-            console.log({data});
 
         });
 
@@ -620,14 +607,14 @@
             var sig_pago_timestamp = 0;
             var sig_pago = 0;
             switch (modalidad) {
-                case 'diario':
+                case 'Día':
 
                     tiempo_pagado = 24 * 60 * 60 * 1000;
                     sig_pago_timestamp = timestamp + tiempo_pagado;
                     sig_pago = toDate(sig_pago_timestamp);
 
                     break;
-                case 'semanal':
+                case 'Semana':
 
                     tiempo_pagado = 7 * 24 * 60 * 60 * 1000;
                     sig_pago_timestamp = timestamp + tiempo_pagado;
@@ -635,28 +622,28 @@
 
 
                     break;
-                case 'mensual':
+                case 'Mes':
 
                     sig_pago_timestamp = sumarMesesTimestamp(timestamp, 1);
                     sig_pago = toDate(sig_pago_timestamp);
 
 
                     break;
-                case 'bimestral':
+                case 'Bimestre':
 
                     sig_pago_timestamp = sumarMesesTimestamp(timestamp, 2);
                     sig_pago = toDate(sig_pago_timestamp);
 
 
                     break;
-                case 'semestral':
+                case 'Semestre':
 
                     sig_pago_timestamp = sumarMesesTimestamp(timestamp, 6);
                     sig_pago = toDate(sig_pago_timestamp);
 
 
                     break;
-                case 'anual':
+                case 'Año':
 
                     sig_pago_timestamp = sumarMesesTimestamp(timestamp, 12);
                     sig_pago = toDate(sig_pago_timestamp);
@@ -730,8 +717,7 @@
             }
 
 
-            /*console.log($('#modalidad').val());
-            if ($('#modalidad').val() == 'default') {
+            /*if ($('#modalidad').val() == 'default') {
                 isValidado = false;
                 mensajeValidacion = 'Debes de llenar todos los campos personales y de facturación.'
             }*/
@@ -764,15 +750,12 @@
 
             const delDesc = await asyncPostAjax('/usuarios/eliminar/', { id:datos.id });
 
-
             if (delDesc.state = 'success') {
 
                 showNotification(delDesc.state, delDesc.message);
                 resetTablaUsuarios();
 
             }
-
-            console.log({datos});
 
         });
 

@@ -125,6 +125,25 @@ const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, 
 });
 
 
+const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, next) {
+
+    const {id, modalidad_actual, sig_pago, sig_pago_timestamp} = req.body;
+
+    console.log({id});
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    const stmt = db.prepare('UPDATE usuarios SET modalidad_actual = ?, sig_pago = ?, sig_pago_timestamp = ? WHERE id = ?');
+    const result = stmt.run(modalidad_actual, sig_pago, sig_pago_timestamp, id);
+
+    res.send({state: "success" , message: 'Usuario actualizado con éxito'});
+
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
 const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 
     const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento} = req.body
@@ -238,13 +257,13 @@ const consultarUsuario = router.post('/usuarios/consultar/', function(req, res, 
 
 const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
 
-    const {descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad} = req.body
+    const {descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario} = req.body
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
 
 
-    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad) 
-                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad)`;
+    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario) 
+                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad, @nombre_usuario)`;
                             
     const insert = db.prepare(command);
     
@@ -271,6 +290,7 @@ const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
         precio_total: precio_total,
         descuento_inscripcion: descuento_inscripcion,
         descuento_modalidad: descuento_modalidad,
+        nombre_usuario: nombre_usuario
     };
      
     console.log({datosPago});
@@ -311,5 +331,6 @@ module.exports = {
     getPrecioConcepto,
     agregarPago,
     getPagos,
-    consultarUsuario
+    consultarUsuario,
+    actPagoUser
 }

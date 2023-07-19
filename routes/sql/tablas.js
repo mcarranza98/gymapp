@@ -74,7 +74,8 @@ const initPagos = `CREATE TABLE IF NOT EXISTS pagos (
                         precio_modalidad TEXT NOT NULL,
                         precio_total TEXT NOT NULL, 
                         descuento_inscripcion TEXT NOT NULL,
-                        descuento_modalidad TEXT NOT NULL
+                        descuento_modalidad TEXT NOT NULL,
+                        nombre_usuario TEXT NOT NULL
                         )`;
 
 db_pagos.prepare(initPagos).run();
