@@ -4,7 +4,8 @@ const {gimnasio} = require('../gimnasio');
 const { configuracion } = require('../configuracion');
 const {posts, cambiarPrecio, getConceptos, setPrecio, agregarDesc, 
     getDescuentos, eliminarDescuentos, eliminarUsuario, getPrecioConcepto, 
-    agregarPago, getPagos, consultarUsuario, actPagoUser} = require('../posts/posts');
+    agregarPago, getPagos, consultarUsuario, actPagoUser,
+    updateUser} = require('../posts/posts');
 
 
 module.exports = [

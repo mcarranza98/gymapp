@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="section-body">
                         <h3 class="pt-2">Lista de precios</h3>
-                        <table id="listaPreciosTable" class="display" style="width:100%">
+                        <table id="listaPreciosTable" class="hover" style="width:100%">
                             <thead>
                             </thead>
                             <tbody>
@@ -40,12 +40,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-body">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between mb-4">
                             <h3 class="pt-2">Promociones / descuentos</h3>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
                                 class="btn btn-primary">Agregar</button>
                         </div>
-                        <table id="listaPromosTable" class="display" style="width:100%">
+                        <table id="listaPromosTable" class="hover" style="width:100%">
                             <thead>
                             </thead>
                             <tbody>
@@ -61,8 +61,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-body">
-                        <h3 class="pt-2">Historial de pagos</h3>
-                        <table id="historialPagosTable" class="display" style="width:100%">
+                        <div class="mb-4">
+                            <h3 class="pt-2">Historial de pagos</h3>
+                        </div>
+                        <table id="historialPagosTable" class="hover" style="width:100%">
                             <thead>
                             </thead>
                             <tbody>
@@ -256,7 +258,6 @@
 
 
             },
-            dom: 'lrt',
             columns: [
                 { data: 'nombre_descuento', title: 'Nombre', width: '40%', visible: true },
                 { data: 'codigo_descuento', title: 'Código', width: '20%', visible: true },
@@ -269,7 +270,10 @@
                 return: true,
             },
             info: false,
-            paging: false,
+            paging: true,
+            pageLength: 10, 
+            searching: true,
+            pagingType: 'full_numbers',
             targets: 'no-sort',
             bSort: true,
             order: [[0, 'asc']],
@@ -281,9 +285,7 @@
         var tablaPagos = $('#historialPagosTable').DataTable({
             "initComplete": function (settings, json) {
 
-
             },
-            dom: 'lrt',
             columns: [
                 { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
                 { data: 'nombre_usuario', title: 'Usuario', width: '35%', visible: true },
@@ -296,22 +298,23 @@
                 return: true,
             },
             info: false,
-            paging: false,
+            paging: true,
+            pageLength: 10, 
+            searching: true,
+            pagingType: 'full_numbers',
             targets: 'no-sort',
             bSort: true,
             order: [[0, 'asc']],
 
         });
 
-        await obtenerPagos()
+        await obtenerPagos();
 
         async function obtenerConceptos() {
 
             tablaPrecios.clear().draw()
 
             var conceptos = await $.get('/gimnasio/obtener/conceptos');
-
-            console.log({ conceptos });
 
             nuevasRows = [];
 
@@ -336,7 +339,6 @@
         $('#modalModificarPrecio').on('shown.bs.modal', function () {
 
             let data = $('#modalModificarPrecio').data();
-            console.log({data});
             $('#nuevo_precio').val(data.precio_pago);
 
         });
@@ -365,8 +367,6 @@
             const $form = $("#agregarDescForm");
             const data = getFormData($form);
 
-            console.log({ data });
-
             const postDesc = await asyncPostAjax('/descuento/agregar', data);
 
 
@@ -387,8 +387,6 @@
 
             var descuentos = await $.get('/gimnasio/obtener/descuentos');
 
-            console.log({ descuentos });
-
             tablaPromos.rows.add(descuentos.desc).draw();
 
         }
@@ -398,7 +396,6 @@
 
             var datosFila = tablaPromos.row(this).data();
             var indiceFila = tablaPromos.row(this).index();
-            console.log({datosFila});
 
             $('#eliminarDescuento').data(datosFila);
 
@@ -418,8 +415,6 @@
 
             }
 
-            console.log({datos});
-
         });
 
 
@@ -429,11 +424,13 @@
 
             var pagos = await $.get('/gimnasio/obtener/pagos');
 
-            console.log({ pagos });
-
             nuevasRows = [];
 
+            let rows = 1;
             for (const row of pagos.orders) {
+
+                console.log(rows++);
+                console.log({row});
 
                 var dataUser = await $.post('/usuarios/consultar/', {id:row.id_usuario});
 
@@ -442,7 +439,6 @@
                 }else{
                     row.pago_inscripcion_text = 'No'
                 }
-                console.log({dataUser});
                 row.nombre_usuario = dataUser.datos ? dataUser.datos.nombre_usuario : row.nombre_usuario;
 
                 row.fecha = toDate(row.fecha_pago);
@@ -450,8 +446,6 @@
                 nuevasRows.push(row)
 
             };
-
-            console.log({nuevasRows});
 
             tablaPagos.rows.add(nuevasRows).draw();
 

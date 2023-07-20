@@ -2,7 +2,7 @@
     <div class="col">
         <div class="page-description d-flex justify-content-between">
             <h1>Usuarios</h1>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            <button id="btnAgregarUsuario" type="button" class="btn btn-primary" data-bs-toggle="modal"
                 data-bs-target="#agregarUsuario">Agregar</button>
         </div>
 
@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-12">
         <div class="section-body">
-            <table id="usuariosTable" class="display" style="width:100%">
+            <table id="usuariosTable" class="hover" style="width:100%">
                 <thead>
                 </thead>
                 <tbody>
@@ -232,7 +232,7 @@
 
 
     const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
-                        <a data-bs-toggle="modal" data-bs-target="#agregarUsuario"><i class="material-icons-two-tone">edit</i></a>
+                        <a id="btnModificarUsuario"><i class="material-icons-two-tone">edit</i></a>
                         <a data-bs-toggle="modal" data-bs-target="#registrarPago"><i class="material-icons-two-tone">payments</i></a>
                         <a href="/usuarios"><i class="material-icons-two-tone">fingerprint</i></a>
                         <a data-bs-toggle="modal" data-bs-target="#eliminarUsuario"><i class="material-icons-two-tone">delete</i></a>
@@ -367,18 +367,45 @@
 
                 try {
 
-                    const postUser = await asyncPostAjax('/usuarios/agregar', data);
+                    let datos = $('#agregarUsuario').data();
+
+                    let datosLength = Object.keys(datos).length
+
+                    if( datosLength == 0 ){
+
+                        const postUser = await asyncPostAjax('/usuarios/agregar', data);
 
 
 
-                    if (postUser.state = 'success') {
+                        if (postUser.state = 'success') {
 
-                        $('#agregarUsuario').modal('toggle');
-                        limpiarAgregarUsuario();
-                        showNotification(postUser.state, postUser.message);
-                        resetTablaUsuarios()
+                            $('#agregarUsuario').modal('toggle');
+                            limpiarAgregarUsuario();
+                            showNotification(postUser.state, postUser.message);
+                            resetTablaUsuarios()
+
+                        }
+
+                    }else{
+
+                        data.id = datos.id;
+
+                        console.log('actualizar');
+
+                        const actUser = await asyncPostAjax('/usuarios/actualizar', data);
+
+                        if (actUser.state = 'success') {
+
+                            $('#agregarUsuario').modal('toggle');
+                            limpiarAgregarUsuario();
+                            showNotification(actUser.state, actUser.message);
+                            resetTablaUsuarios()
+
+                        }
 
                     }
+
+                    
 
                 } catch (e) {
 
@@ -404,13 +431,15 @@
             // This code will be executed when the value of the select element changes
             var selectedValue = $(this).val();
 
-            const precioConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:selectedValue });
+            if( selectedValue != '' ){
+                const precioConcepto = await asyncPostAjax('/gimnasio/concepto/info', { id:selectedValue });
 
-            let precio = precioConcepto.concepto.precio_pago;
+                let precio = precioConcepto.concepto.precio_pago;
 
-            $('#precioModalidad').html(`$${precio.toFixed(2)}`);
+                $('#precioModalidad').html(`$${precio.toFixed(2)}`);
 
-            sumarPago()
+                sumarPago()
+            }
 
         });
 
@@ -509,6 +538,78 @@
             }
 
         });
+
+
+        //LLIMPIAR MODAL DE PAGO AL CERRARLO
+
+        $('#registrarPago').on('hide.bs.modal', function () {
+
+            select2Modalidad.val(null).trigger("change");
+            select2Codigos.val(null).trigger("change");
+            $("#checkInscripcionPago").prop("checked", false);
+
+        });
+
+        $("#btnAgregarUsuario").click(function() {
+            
+            console.log("Se hizo clic en el botón 'btnAgregarUsuario'");
+
+            $('#agregarUsuario').removeData();
+
+            console.log($('#agregarUsuario').data())
+
+            
+        });
+
+        $("#usuariosTable").on("click", "#btnModificarUsuario", function() {
+
+            let datos = $('#agregarUsuario').data();
+
+            console.log(datos);
+            $('#nombre_usuario').val(datos.nombre_usuario);
+            $('#telefono_usuario').val(datos.telefono_usuario);
+            $('#nombre_contacto').val(datos.nombre_contacto);
+            $('#telefono_contacto').val(datos.telefono_contacto);
+            $('#fecha_nacimiento').val(datos.fecha_nacimiento);
+
+            if( datos.radio_sexo == 'hombre' ){
+                $('#radio_sexo1').prop('checked', true);
+            }else{
+                $('#radio_sexo2').prop('checked', true);
+            }
+            
+            
+
+            $('#agregarUsuario').modal('show');
+
+        });
+
+        $('#registrarPago').on('shown.bs.modal', function () {
+
+            let datos = $('#registrarPago').data();
+
+            console.log(datos);
+
+            if( datos.fecha_ingreso != datos.sig_pago ){
+                $('#checkInscripcionPago').prop('disabled', false);
+            }else{
+                $('#checkInscripcionPago').prop('disabled', true);
+            }
+
+            console.log('abierto');
+
+        });
+
+
+
+
+
+
+
+
+
+
+
 
         //FUNCIONES GLOBALES
 
@@ -696,6 +797,7 @@
             $('#nombre_contacto').val('');
             $('#telefono_usuario').val('');
             $('#telefono_contacto').val('');
+            $('#fecha_nacimiento').val('');
             $('#radio_sexo1').prop('checked', false);
             $('#radio_sexo2').prop('checked', false);
             //$('#modalidad').val('default');
@@ -740,6 +842,7 @@
 
             $('#eliminarUsuario').data(datosFila);
             $('#registrarPago').data(datosFila);
+            $('#agregarUsuario').data(datosFila);
             
 
         });

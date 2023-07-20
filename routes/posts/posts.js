@@ -51,6 +51,68 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
 
 });
 
+
+const updateUser = router.post('/usuarios/actualizar', function(req, res, next) {
+
+    const {nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp, id} = req.body
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    const datos = {
+
+    }
+
+    try {
+        // Ejecutar la consulta de actualización
+        const stmt = db.prepare(`
+          UPDATE usuarios 
+          SET nombre_usuario = ?, 
+              telefono_usuario = ?, 
+              radio_sexo = ?, 
+              fecha_nacimiento = ?, 
+              nombre_contacto = ?, 
+              telefono_contacto = ?, 
+              modalidad_actual = ?, 
+              fecha_ingreso = ?, 
+              fecha_ingreso_timestamp = ?, 
+              sig_pago = ?, 
+              sig_pago_timestamp = ? 
+          WHERE id = ?;
+        `);
+    
+        const result = stmt.run(
+          nombre_usuario,
+          telefono_usuario,
+          radio_sexo,
+          fecha_nacimiento,
+          nombre_contacto,
+          telefono_contacto,
+          modalidad_actual,
+          fecha_ingreso,
+          fecha_ingreso_timestamp,
+          sig_pago,
+          sig_pago_timestamp,
+          id
+        );
+    
+        // Verificar si la actualización fue exitosa
+        if (result.changes > 0) {
+            res.send({state: "success" , message : "Usuario actualizado exitosamente."});
+        } else {
+          res.send({state: "warning" , message : "No se encontró ningún usuario con el ID proporcionado."});
+        }
+      } catch (error) {
+        res.send({state: "warning" , message : "Error al actualizar al usuario."});
+      } finally {
+        // Cerrar la conexión a la base de datos
+        db.close();
+      }
+
+    db.close();
+
+});
+
+
 const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, res, next) {
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
@@ -332,5 +394,6 @@ module.exports = {
     agregarPago,
     getPagos,
     consultarUsuario,
-    actPagoUser
+    actPagoUser,
+    updateUser
 }
