@@ -30,17 +30,17 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
 
     const datosUsuario = {
         id: uuid,
-        nombre_usuario: nombre_usuario,
-        telefono_usuario: telefono_usuario,
-        radio_sexo: radio_sexo,
-        fecha_nacimiento: fecha_nacimiento,
-        nombre_contacto: nombre_contacto,
-        telefono_contacto: telefono_contacto,
-        modalidad_actual: modalidad_actual,
-        fecha_ingreso: fecha_ingreso,
-        fecha_ingreso_timestamp: fecha_ingreso_timestamp,
-        sig_pago: sig_pago,
-        sig_pago_timestamp: sig_pago_timestamp,
+        nombre_usuario,
+        telefono_usuario,
+        radio_sexo,
+        fecha_nacimiento,
+        nombre_contacto,
+        telefono_contacto,
+        modalidad_actual,
+        fecha_ingreso,
+        fecha_ingreso_timestamp,
+        sig_pago,
+        sig_pago_timestamp,
     };
      
     console.log({datosUsuario});
@@ -208,13 +208,14 @@ const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, n
 
 const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 
-    const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento} = req.body
+    const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento, limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp} = req.body
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
 
+    
 
-    const command = `INSERT INTO descuentos(id, codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento) 
-                    VALUES(@id, @codigo_descuento, @concepto_descuento, @nombre_descuento, @tipo_descuento, @valor_descuento)`;
+    const command = `INSERT INTO descuentos(id, codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento,  limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp) 
+                    VALUES(@id, @codigo_descuento, @concepto_descuento, @nombre_descuento, @tipo_descuento, @valor_descuento, @limite_usos, @usos_actuales, @limite_usuario, @fecha_vencimiento, @fecha_vencimiento_timestamp)`;
                             
     const insert = db.prepare(command);
     
@@ -230,12 +231,19 @@ const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 
     const datosDescuento = {
         id: uuid,
-        codigo_descuento: codigo_descuento,
-        concepto_descuento: concepto_descuento,
-        nombre_descuento: nombre_descuento,
-        tipo_descuento: tipo_descuento,
-        valor_descuento: valor_descuento,
+        codigo_descuento,
+        concepto_descuento,
+        nombre_descuento,
+        tipo_descuento,
+        valor_descuento,
+        limite_usos, 
+        usos_actuales,
+        limite_usuario, 
+        fecha_vencimiento, 
+        fecha_vencimiento_timestamp
     };
+
+    console.log({datosDescuento});
     
     insertDescuento(datosDescuento);
 
@@ -341,18 +349,18 @@ const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
 
     const datosPago = {
         id: uuid,
-        descuentos_aplicados: descuentos_aplicados,
-        fecha_pago: fecha_pago,
-        id_usuario: id_usuario,
-        pago_concepto: pago_concepto,
-        pago_inscripcion: pago_inscripcion,
-        pago_modalidad: pago_modalidad,
-        precio_inscripcion: precio_inscripcion,
-        precio_modalidad: precio_modalidad,
-        precio_total: precio_total,
-        descuento_inscripcion: descuento_inscripcion,
-        descuento_modalidad: descuento_modalidad,
-        nombre_usuario: nombre_usuario
+        descuentos_aplicados,
+        fecha_pago,
+        id_usuario,
+        pago_concepto,
+        pago_inscripcion,
+        pago_modalidad,
+        precio_inscripcion,
+        precio_modalidad,
+        precio_total,
+        descuento_inscripcion,
+        descuento_modalidad,
+        nombre_usuario
     };
      
     console.log({datosPago});

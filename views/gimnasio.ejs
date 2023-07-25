@@ -17,6 +17,9 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Historial pagos</button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-graficos-tab" data-bs-toggle="pill" data-bs-target="#pills-graficos" type="button" role="tab" aria-controls="pills-graficos" aria-selected="false">Estadísticas</button>
+        </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -76,10 +79,19 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane fade" id="pills-graficos" role="tabpanel" aria-labelledby="pills-graficos-tab">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-body">
+                        <div class="mb-4">
+                            <h3 class="pt-2">Usuarios activos</h3>
+                        </div>
+                        <canvas id="miGrafico"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    
-    
 </div>
 
 <!--MODAL PARA MODIFICAR PRECIO DE LOS CONCEPTOS -->
@@ -162,7 +174,36 @@
                         <div class="mb-2 col-6">
                             <label for="valor_descuento" class="form-label">Valor</label>
                             <input type="text" name="valor_descuento" id="valor_descuento"
-                                class="form-control CurrencyInput" aria-describedby="emailHelp">
+                                class="form-control" aria-describedby="emailHelp">
+                        </div>
+
+                        <hr class="mt-4">
+
+                        <h5 class="mt-2 mb-3">Restricciones</h5>
+
+                        <div class="mb-2 col-4">
+                            <label for="limite_usos" class="form-label">Limite de usos</label>
+                            <input type="number" min="0" name="limite_usos" id="limite_usos"
+                                class="form-control" aria-describedby="emailHelp">
+                            <div id="passwordHelpBlock" class="form-text">
+                                Límite de veces que el cupón puede ser usado.
+                            </div>
+                        </div>
+                        <div class="mb-2 col-4">
+                            <label for="limite_usuario" class="form-label">Limite de usos por usuario</label>
+                            <input type="number" min="0" name="limite_usuario" id="limite_usuario"
+                                class="form-control" aria-describedby="emailHelp">
+                            <div id="passwordHelpBlock" class="form-text">
+                                Límite de veces que el cupón puede ser aplicado a un mismo usuario.
+                            </div>
+                        </div>
+                        <div class="mb-2 col-4">
+                            <label for="fecha_vencimiento" class="form-label">Fecha de vencimiento</label>
+                            <input type="date" name="fecha_vencimiento" id="fecha_vencimiento"
+                                class="form-control" min="" aria-describedby="emailHelp">
+                            <div id="passwordHelpBlock" class="form-text">
+                                Fecha de caducidad del cupón, si no se aplica el cupón no caducará.
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -220,6 +261,19 @@
             allowClear: true
         });
 
+
+        //Bloquear fechas anteriores al día actual
+        // Obtén el elemento input de tipo date
+        const inputFecha = document.getElementById("fecha_vencimiento");
+
+        // Obtiene la fecha actual en el formato "YYYY-MM-DD"
+        const fechaActualVenc = new Date().toISOString().split("T")[0];
+
+        // Establece la fecha mínima permitida en el campo de fecha
+        inputFecha.setAttribute("min", fechaActualVenc);
+
+
+
         var tablaPrecios = $('#listaPreciosTable').DataTable({
             "initComplete": function (settings, json) {
 
@@ -236,6 +290,9 @@
             autoWidth: false,
             search: {
                 return: true,
+            },
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
             },
             info: false,
             paging: false,
@@ -259,8 +316,9 @@
 
             },
             columns: [
-                { data: 'nombre_descuento', title: 'Nombre', width: '40%', visible: true },
-                { data: 'codigo_descuento', title: 'Código', width: '20%', visible: true },
+                { data: 'nombre_descuento', title: 'Nombre', width: '30%', visible: true },
+                { data: 'usos_totales', title: 'Usos', width: '15%', visible: true },
+                { data: 'codigo_descuento', title: 'Código', width: '15%', visible: true },
                 { data: 'tipo_descuento', title: 'Tipo', orderable: false, width: '15%' },
                 { data: 'valor_descuento', title: 'Valor', orderable: false, width: '15%' },
                 { class: 'details-control', orderable: false, data: null, defaultContent: action_iconsPD, width: '10%' },
@@ -268,6 +326,9 @@
             autoWidth: false,
             search: {
                 return: true,
+            },
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
             },
             info: false,
             paging: true,
@@ -297,6 +358,9 @@
             search: {
                 return: true,
             },
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
+            },
             info: false,
             paging: true,
             pageLength: 10, 
@@ -316,7 +380,7 @@
 
             var conceptos = await $.get('/gimnasio/obtener/conceptos');
 
-            nuevasRows = [];
+            var nuevasRows = [];
 
             conceptos.orders.forEach(row => {
                 row.precioFormatted = `$ ${row.precio_pago}`;
@@ -367,25 +431,57 @@
             const $form = $("#agregarDescForm");
             const data = getFormData($form);
 
-            const postDesc = await asyncPostAjax('/descuento/agregar', data);
+            data.fecha_vencimiento_timestamp = obtenerTimestamp(data.fecha_vencimiento);
+            data.limite_usos = data.limite_usos != '' ? parseInt(data.limite_usos) : 999999;
+            data.limite_usuario = data.limite_usuario != '' ? parseInt(data.limite_usuario) : 999999;
+            data.valor_descuento = parseInt(data.valor_descuento);
+            data.usos_actuales = 0;
 
+            console.log({data});
+
+            const postDesc = await asyncPostAjax('/descuento/agregar', data);
 
             if (postDesc.state = 'success') {
 
                 $('#modalAgregarDesc').modal('toggle');
-                showNotification(postDesc.state, postDesc.message);
+                
                 obtenerDescuentos();
 
             }
-
+            showNotification(postDesc.state, postDesc.message);
 
         });
+
+
+        function obtenerTimestamp(fechaInput) {
+
+            // Crea un objeto Date a partir del valor del campo de entrada
+            const fechaObjeto = new Date(fechaInput);
+
+            // Obtiene el desplazamiento horario (offset) en minutos
+            const offset = fechaObjeto.getTimezoneOffset();
+
+            // Ajusta la fecha restando el desplazamiento horario en minutos
+            fechaObjeto.setMinutes(fechaObjeto.getMinutes() - offset);
+
+            // Obtén el timestamp en milisegundos (milisegundos desde el 1 de enero de 1970)
+            const timestamp = fechaObjeto.getTime();
+
+            return timestamp;
+        }
 
         async function obtenerDescuentos() {
 
             tablaPromos.clear().draw()
 
             var descuentos = await $.get('/gimnasio/obtener/descuentos');
+
+            for (const row of descuentos.desc) {
+
+                console.log({row});
+                row.usos_totales = row.limite_usos == 999999 ? `${row.usos_actuales} / ilimitado` : `${row.usos_actuales} / ${row.limite_usos}`
+
+            }
 
             tablaPromos.rows.add(descuentos.desc).draw();
 
@@ -424,13 +520,10 @@
 
             var pagos = await $.get('/gimnasio/obtener/pagos');
 
-            nuevasRows = [];
+            var nuevasRows = [];
 
             let rows = 1;
             for (const row of pagos.orders) {
-
-                console.log(rows++);
-                console.log({row});
 
                 var dataUser = await $.post('/usuarios/consultar/', {id:row.id_usuario});
 
@@ -452,6 +545,32 @@
         }
 
 
+        //Estadísticas
+
+        var ctx = document.getElementById('miGrafico').getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
+            datasets: [{
+            label: 'Usuarios mensuales',
+            data: [140, 127, 155, 227],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+            y: {
+                beginAtZero: true
+            }
+            }
+        }
+        });
+
+
         function toDate(timestamp) {
             // Crear un objeto de fecha a partir del timestamp en milisegundos
             const fechaObjeto = new Date(timestamp);
@@ -466,21 +585,6 @@
 
             return fechaFormateada;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -544,9 +648,6 @@
 
 
     })
-
-
-
 
 
 </script>

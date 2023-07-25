@@ -297,7 +297,6 @@
 
 
             },
-            dom: 'lrt',
             columns: [
 
                 { data: 'nombre_usuario', title: 'Nombre', width: '30%' },
@@ -310,8 +309,13 @@
             search: {
                 return: true,
             },
-            info: false,
-            paging: false,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
+            },
+            info: true,
+            paging: true,
+            searching: true,
+            pagingType: 'full_numbers',
             targets: 'no-sort',
             bSort: true,
             order: [[0, 'asc']],
