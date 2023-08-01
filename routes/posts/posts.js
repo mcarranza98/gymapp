@@ -251,6 +251,86 @@ const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 
 });
 
+
+const editarDesc = router.post('/descuento/actualizar', function(req, res, next) {
+    const {
+      id,
+      codigo_descuento,
+      concepto_descuento,
+      nombre_descuento,
+      tipo_descuento,
+      valor_descuento,
+      limite_usos,
+      usos_actuales,
+      limite_usuario,
+      fecha_vencimiento,
+      fecha_vencimiento_timestamp
+    } = req.body;
+
+    const datos = {
+        codigo_descuento,
+        concepto_descuento,
+        nombre_descuento,
+        tipo_descuento,
+        valor_descuento,
+        limite_usos,
+        usos_actuales,
+        limite_usuario,
+        fecha_vencimiento,
+        fecha_vencimiento_timestamp,
+        id
+    }
+  
+    console.log({datos});
+
+    const db = new Database(path.join(__dirname, '..', 'database', 'descuentos.db'));
+  
+    try {
+        // Ejecutar la consulta de actualización
+        const stmt = db.prepare(`
+        UPDATE descuentos 
+        SET codigo_descuento = ?, 
+            concepto_descuento = ?, 
+            nombre_descuento = ?, 
+            tipo_descuento = ?, 
+            valor_descuento = ?,  
+            limite_usos = ?, 
+            usos_actuales = ?, 
+            limite_usuario = ?, 
+            fecha_vencimiento = ?, 
+            fecha_vencimiento_timestamp = ? 
+            WHERE id = ?`);
+    
+        const result = stmt.run(
+            codigo_descuento,
+            concepto_descuento,
+            nombre_descuento,
+            tipo_descuento,
+            valor_descuento,
+            limite_usos,
+            usos_actuales,
+            limite_usuario,
+            fecha_vencimiento,
+            fecha_vencimiento_timestamp,
+            id
+        );
+    
+        // Verificar si la actualización fue exitosa
+        if (result.changes > 0) {
+            res.send({state: "success" , message : "Descuento actualizado exitosamente."});
+        } else {
+            res.send({state: "warning" , message : "No se encontró ningún descuento con el ID proporcionado."});
+        }
+        } catch (error) {
+        res.send({state: "warning" , message : "Error al actualizar el descuento."});
+        } finally {
+        // Cerrar la conexión a la base de datos
+        db.close();
+        }
+  
+    db.close();
+  });
+
 const getDescuentos = router.get('/gimnasio/obtener/descuentos', function(req, res, next) {
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
@@ -403,5 +483,6 @@ module.exports = {
     getPagos,
     consultarUsuario,
     actPagoUser,
-    updateUser
+    updateUser,
+    editarDesc
 }

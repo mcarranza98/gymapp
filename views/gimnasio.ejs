@@ -45,7 +45,7 @@
                     <div class="section-body">
                         <div class="d-flex justify-content-between mb-4">
                             <h3 class="pt-2">Promociones / descuentos</h3>
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
+                            <button id="btnSubmitAgregarDesc" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
                                 class="btn btn-primary">Agregar</button>
                         </div>
                         <table id="listaPromosTable" class="hover" style="width:100%">
@@ -306,7 +306,7 @@
         
 
         const action_iconsPD = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
-                                    <a data-bs-toggle="modal" data-bs-target="#modalModificarPrecio"><i class="material-icons-two-tone">edit</i></a>
+                                    <a id="btnUpdDesc" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"><i class="material-icons-two-tone">edit</i></a>
                                     <a data-bs-toggle="modal" data-bs-target="#eliminarDescuento"><i class="material-icons-two-tone">delete</i></a>
                                 </div>`;
 
@@ -348,6 +348,7 @@
 
             },
             columns: [
+                { data: 'fecha_pago', title: '', visible: false },
                 { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
                 { data: 'nombre_usuario', title: 'Usuario', width: '35%', visible: true },
                 { data: 'pago_concepto', title: 'Concepto', width: '15%', visible: true },
@@ -368,7 +369,7 @@
             pagingType: 'full_numbers',
             targets: 'no-sort',
             bSort: true,
-            order: [[0, 'asc']],
+            order: [[0, 'desc']],
 
         });
 
@@ -431,24 +432,94 @@
             const $form = $("#agregarDescForm");
             const data = getFormData($form);
 
-            data.fecha_vencimiento_timestamp = obtenerTimestamp(data.fecha_vencimiento);
+            data.fecha_vencimiento_timestamp = data.fecha_vencimiento != '' ? obtenerTimestamp(data.fecha_vencimiento) : 4102466399;
+            data.fecha_vencimiento = data.fecha_vencimiento != '' ? data.fecha_vencimiento : '2099-12-31';
             data.limite_usos = data.limite_usos != '' ? parseInt(data.limite_usos) : 999999;
             data.limite_usuario = data.limite_usuario != '' ? parseInt(data.limite_usuario) : 999999;
             data.valor_descuento = parseInt(data.valor_descuento);
             data.usos_actuales = 0;
 
             console.log({data});
+            console.log(data.fecha_vencimiento_timestamp);
 
-            const postDesc = await asyncPostAjax('/descuento/agregar', data);
+            const datosModal = $('#modalAgregarDesc').data();
 
-            if (postDesc.state = 'success') {
+            let state = '';
+            let message = '';
 
-                $('#modalAgregarDesc').modal('toggle');
+            if( datosModal.id ){
+
+                data.id = datosModal.id;
+
+                const updDesc = await asyncPostAjax('/descuento/actualizar', data);
+
+                state = updDesc.state;
+                message = updDesc.message;
+
+            }else{
+
+                const postDesc = await asyncPostAjax('/descuento/agregar', data);
+
+                state = postDesc.state;
+                message = postDesc.message;
                 
-                obtenerDescuentos();
+            }
+
+            if ( state = 'success' ) {
+
+                    $('#modalAgregarDesc').modal('toggle');
 
             }
-            showNotification(postDesc.state, postDesc.message);
+            
+            obtenerDescuentos();
+            showNotification( state, message );
+
+            console.log({datosModal});
+
+
+
+        });
+
+
+        $('#btnSubmitAgregarDesc').on('click', async function (event) {
+
+            $('#modalAgregarDesc').removeData();
+
+        });
+
+
+        $('#modalAgregarDesc').on('hide.bs.modal', function () {
+
+            select2Tipo.val(null).trigger("change");
+            select2Concepto.val(null).trigger("change");
+            $("#nombre_descuento").val('');
+            $("#codigo_descuento").val('');
+            $("#valor_descuento").val('');
+            $("#limite_usos").val('');
+            $("#limite_usuario").val('');
+            $("#fecha_vencimiento").val('');
+
+        });
+
+
+        $('#modalAgregarDesc').on('shown.bs.modal', function () {
+
+            let data = $('#modalAgregarDesc').data();
+            
+            console.log(data);
+            if( data.id ){
+
+                select2Tipo.val(data.tipo_descuento).trigger("change");
+                select2Concepto.val(data.concepto_descuento).trigger("change");
+                $("#nombre_descuento").val(data.nombre_descuento);
+                $("#codigo_descuento").val(data.codigo_descuento);
+                $("#valor_descuento").val(data.valor_descuento);
+                data.limite_usos != 999999 ? $("#limite_usos").val(data.limite_usos) : '';
+                data.limite_usuario != 999999 ? $("#limite_usuario").val(data.limite_usuario) : '';
+                data.fecha_vencimiento != '2099-12-31' ? $("#fecha_vencimiento").val(data.fecha_vencimiento) : '';
+
+            }
+
 
         });
 
@@ -494,6 +565,8 @@
             var indiceFila = tablaPromos.row(this).index();
 
             $('#eliminarDescuento').data(datosFila);
+
+            $('#modalAgregarDesc').data(datosFila);
 
         });
 

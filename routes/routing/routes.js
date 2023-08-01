@@ -4,7 +4,7 @@ const {gimnasio} = require('../gimnasio');
 const { configuracion } = require('../configuracion');
 const {posts, cambiarPrecio, getConceptos, setPrecio, agregarDesc, 
     getDescuentos, eliminarDescuentos, eliminarUsuario, getPrecioConcepto, 
-    agregarPago, getPagos, consultarUsuario, actPagoUser,
+    agregarPago, getPagos, consultarUsuario, actPagoUser,editarDesc,
     updateUser} = require('../posts/posts');
 
 
@@ -26,5 +26,6 @@ module.exports = [
     agregarPago,
     getPagos,
     consultarUsuario,
-    actPagoUser
+    actPagoUser,
+    editarDesc
 ]
