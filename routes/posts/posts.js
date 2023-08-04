@@ -346,6 +346,23 @@ const getDescuentos = router.get('/gimnasio/obtener/descuentos', function(req, r
 });
 
 
+const getDescuento = router.post('/gimnasio/obtener/descuento', function(req, res, next) {
+
+    const { id } = req.body;
+
+    console.log(id);
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+    let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
+    const desc = command.get(id);
+
+    res.send({state: "success" , desc});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
 const eliminarDescuentos = router.post('/gimnasio/eliminar/descuentos', function(req, res, next) {
 
     const { id } = req.body;
@@ -484,5 +501,6 @@ module.exports = {
     consultarUsuario,
     actPagoUser,
     updateUser,
-    editarDesc
+    editarDesc,
+    getDescuento
 }

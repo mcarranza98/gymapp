@@ -271,18 +271,6 @@
 
         }
 
-        $('.select2-codigos-descuentos').on('select2:select', function (e) {
-
-            var opcionSeleccionada = e.params.data;
-
-        });
-
-        $('.select2-codigos-descuentos').on('select2:unselect', function (e) {
-
-            var opcionSeleccionada = e.params.data;
-
-        });
-
         busqueda = window.location.search;
 
         if (busqueda == '?agregar-usuario') {
@@ -542,6 +530,240 @@
             }
 
         });
+
+
+        $('.select2-codigos-descuentos').on('select2:select',async function (e) {
+
+            var opcionSeleccionada = e.params.data;
+
+            const infoDesc = await asyncPostAjax('/gimnasio/obtener/descuento', {id: opcionSeleccionada.id});
+
+            let precioInsc = $('#precioInscripcion').html();
+            let precioMod = $('#precioModalidad').html();
+
+                precioInsc = parseFloat(precioInsc.replace('$', ''));
+                precioMod = parseFloat(precioMod.replace('$', ''));
+
+            console.log({infoDesc});
+            
+            let dataModal = $('#registrarPago').data();
+
+            //Detecta sí el descuento aplicado es por inscripción
+            if( infoDesc.desc.concepto_descuento == 'inscripcion' ){
+
+                //Revisa que este seleccionado el checkbox de inscripción, sino esta seleccionado no deja aplicar el descuento
+                var isChecked = $('#checkInscripcionPago').is(':checked');
+
+                if( !isChecked ){
+
+                    showNotification('warning', 'Debes de tener la inscripción seleccionada para aplicar un descuento por inscripción');
+                    quitarUltimoDescuento('select2-codigos-descuentos');
+
+                }else{
+
+                    //Sí el decuento es aplicado revisa si el modal tiene registro de un descuento del mismo tipo aplicado previamente
+                    if( dataModal.concepto_inscripcion ){
+                        //en caso de encontrar que ya hay un descuento de este tipo no deja aplicar el segundo
+                        showNotification('warning','ya existe inscripción');
+
+                        quitarUltimoDescuento('select2-codigos-descuentos')
+
+
+                    }else{
+
+                        //Sí no hay un descuento de este tipo ya aplicado pone los datos del mismo en el modal
+                        $('#registrarPago').data({concepto_inscripcion: true});
+
+                        let precioFinal = 0;
+                        if( infoDesc.desc.tipo_descuento == "descontar_cantidad" ){
+
+                            let valor_descuento = infoDesc.desc.valor_descuento;
+                            precioFinal = precioInsc - valor_descuento;
+
+                        }else if( infoDesc.desc.tipo_descuento == "porcentaje" ){
+
+                            let valor_descuento = infoDesc.desc.valor_descuento;
+                            precioFinal = precioInsc - (precioInsc * (valor_descuento / 100));
+
+                        }else if( infoDesc.desc.tipo_descuento == "precio_fijo" ){
+
+                            let valor_descuento = infoDesc.desc.valor_descuento;
+                            precioFinal = valor_descuento;
+                            
+                        }
+                        
+                        $('#precioInscripcion').html(`$${precioFinal}`);
+                        sumarPago()
+
+                    }
+
+
+                }
+
+            }else{
+
+                //En caso de que el descuento no sea por isncripción, las modalidades hacen el mismo proceso de verficar si ya existe
+                //algún descuento previo de este tipo
+                var isSelected = $('#selectModalidadPago').val();
+                console.log({isSelected});
+
+                if( isSelected == '' ){
+
+                    showNotification('warning', 'Debes de tener una modalidad seleccionada para aplicar un descuento por modalidad');
+
+                    quitarUltimoDescuento('select2-codigos-descuentos');
+
+                }else{
+
+                    if( dataModal.concepto_reingreso ){
+
+                        showNotification('warning','ya existe reingreso');
+                        quitarUltimoDescuento('select2-codigos-descuentos')
+
+                    }else{
+
+                        console.log('no existe reingreso');
+
+                        const infoDesc = await asyncPostAjax('/gimnasio/obtener/descuento', { id:opcionSeleccionada.id });
+                        const infoConc = await asyncPostAjax('/gimnasio/concepto/info', { id:isSelected });
+                
+                        console.log({infoDesc});
+                        console.log({infoConc});
+
+                        
+                        let tipo_concepto = infoConc.concepto.concepto_pago;
+                        let tipo_descuento = infoDesc.desc.concepto_descuento;
+                        let modo_descuento = infoDesc.desc.tipo_descuento;
+                        let valor_descuento = infoDesc.desc.valor_descuento;
+
+
+                        let precioFinal = 0;
+                        const descuentoConceptoMap = {
+                            'diario': 'Día',
+                            'semanal': 'Semana',
+                            'mensual': 'Mes',
+                            'bimestral': 'Bimestre',
+                            'semestral': 'Semestre',
+                            'anual': 'Año'
+                            };
+
+                        if (tipo_descuento === 'todos_conceptos') {
+
+                            precioFinal = precioMod - (precioMod * (valor_descuento / 100));
+                            $('#precioModalidad').html(`$${precioFinal}`);
+                            sumarPago()
+                            $('#registrarPago').data({concepto_reingreso: true});
+
+                        } else if (descuentoConceptoMap[tipo_descuento] === tipo_concepto) {
+
+                            calcularModalidadCDes(modo_descuento, valor_descuento, precioMod);
+                            $('#registrarPago').data({concepto_reingreso: true});
+
+                        } else {
+
+                            showNotification('warning', 'Este tipo de descuento no es compatible con esta modalidad.');
+                            quitarUltimoDescuento('select2-codigos-descuentos');
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+        });
+
+        $('.select2-codigos-descuentos').on('select2:unselect', async function (e) {
+
+            var opcionSeleccionada = e.params.data;
+
+            let modalData = $('#registrarPago').data();
+
+            var isSelected = $('#selectModalidadPago').val();
+            var isChecked = $('#checkInscripcionPago').is(':checked');
+
+            const infoDesc = await asyncPostAjax('/gimnasio/obtener/descuento', { id:opcionSeleccionada.id });
+            const infoConc = await asyncPostAjax('/gimnasio/concepto/info', { id:isSelected });
+            const infoInsc = await asyncPostAjax('/gimnasio/concepto/info', { id:'f109714f-563c-48ae-9df1-5ecc7e3236e1' });
+
+            if( isChecked ){
+
+                if( modalData.concepto_inscripcion && infoDesc.desc.concepto_descuento == "inscripcion" ){
+
+                    $('#precioInscripcion').html(`$${infoInsc.concepto.precio_pago}`);
+                    $('#registrarPago').data({concepto_inscripcion: false});
+                    sumarPago()
+
+                    }
+            
+            }
+            
+            if( isSelected != '' ){
+
+                if( modalData.concepto_reingreso ){
+
+                    $('#precioModalidad').html(`$${infoConc.concepto.precio_pago}`);
+                    $('#registrarPago').data({concepto_reingreso: false});
+                    sumarPago()
+
+                }
+
+            }
+
+
+            /*
+            faltantes de descuentos:
+            agregar la información de uso al cupón al hacer submit
+            si quitas y vuelves a poner una modalidad o reinscripción aparece el mensaje de que ya existe un cupón
+            si ya hay cupones seleccionados y cambias de modalidad que la nueva modalidad de aplique con la oferta
+            
+            si pones un cupón de cualquier tipo bloquear el select o el check para evitar cambios
+            
+            */
+            
+
+        });
+        
+
+        function quitarUltimoDescuento(claseSelect2){
+            // Obtener todas las opciones seleccionadas
+            var selectedOptions = $(`.${claseSelect2}`).val();
+
+            // Obtener la última opción seleccionada
+            var lastSelectedOption = selectedOptions[selectedOptions.length - 1];
+
+            // Quitar la última opción seleccionada
+            var removedOption = $(`.${claseSelect2}`).find('option[value="' + lastSelectedOption + '"]');
+            removedOption.prop('selected', false);
+
+            // Actualizar Select2 para reflejar el cambio
+            $(`.${claseSelect2}`).trigger('change.select2');
+        }
+
+
+        function calcularModalidadCDes(modo_descuento, valor_descuento, precioMod){
+
+            let precioFinal = 0;
+            if( modo_descuento == "descontar_cantidad" ){
+
+                precioFinal = precioMod - valor_descuento;
+
+            }else if( modo_descuento == "porcentaje" ){
+
+                precioFinal = precioMod - (precioMod * (valor_descuento / 100));
+
+            }else if( modo_descuento == "precio_fijo" ){
+
+                precioFinal = valor_descuento;
+                
+            }
+            
+            $('#precioModalidad').html(`$${precioFinal}`);
+            sumarPago()
+
+        }
 
 
         //LLIMPIAR MODAL DE PAGO AL CERRARLO
