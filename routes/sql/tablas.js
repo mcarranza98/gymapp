@@ -57,7 +57,8 @@ const initPromos = `CREATE TABLE IF NOT EXISTS descuentos (
                         usos_actuales NTEGER NOT NULL,
                         limite_usuario INTEGER NOT NULL,
                         fecha_vencimiento TEXT NOT NULL,
-                        fecha_vencimiento_timestamp INTEGER NOT NULL
+                        fecha_vencimiento_timestamp INTEGER NOT NULL,
+                        status TEXT NOT NULL
                         )`;
 
 db_descuentos.prepare(initPromos).run();

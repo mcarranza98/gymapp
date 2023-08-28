@@ -264,8 +264,15 @@
             for (var i = 0; i < desc.length; i++) {
 
                 var opcion = desc[i];
-                var optionElement = $('<option>').val(opcion.id).text(opcion.codigo_descuento);
-                select2Codigos.append(optionElement);
+
+                console.log({desc:desc[i]});
+                if( desc[i].status == 'true' ){
+                    
+                    var optionElement = $('<option>').val(opcion.id).text(opcion.codigo_descuento);
+                    select2Codigos.append(optionElement);
+               
+                }
+                
 
             }
 
@@ -418,6 +425,12 @@
 
         });
 
+        $('#registrarPago').on('hidden.bs.modal', function () {
+
+            $(this).removeData();
+
+        });
+
 
         $('#selectModalidadPago').change(async function() {
             // This code will be executed when the value of the select element changes
@@ -495,6 +508,9 @@
             data.nombre_usuario = dataModal.nombre_usuario;
             data.id_usuario = dataModal.id;
 
+            if(valoresSeleccionados.length > 0){
+                await asyncPostAjax('/gimnasio/actualizar/descuento', {id: valoresSeleccionados});
+            }
 
             try {
 
@@ -813,6 +829,7 @@
         $('#registrarPago').on('shown.bs.modal', function () {
 
             let datos = $('#registrarPago').data();
+            obtenerDescuentos()
 
             console.log(datos);
 

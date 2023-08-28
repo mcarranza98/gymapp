@@ -187,6 +187,56 @@ const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, 
 });
 
 
+const actDesc = router.post('/gimnasio/actualizar/descuento', function(req, res, next) {
+
+    const {id} = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+
+    let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
+    const infoDesc = command.get(id);
+
+    const usos_actuales = infoDesc.usos_actuales;
+
+    console.log({usos_actuales});
+
+    if ( usos_actuales < infoDesc.limite_usos ) {
+        
+        const stmt = db.prepare('UPDATE descuentos SET usos_actuales = ? WHERE id = ?');
+        stmt.run(usos_actuales+1, id);
+
+        if( usos_actuales + 1 == infoDesc.limite_usos ){
+
+            const stmt2 = db.prepare('UPDATE descuentos SET status = ? WHERE id = ?');
+            stmt2.run('false', id);
+
+        }
+
+        res.send({state: "success" , message: 'Uso actualizado con éxito'});
+
+        // Cerrar la conexión a la base de datos
+        db.close();
+
+    }else{
+
+        res.send({state: "error" , message: 'Ya no quedan usos disponibles'});
+
+        // Cerrar la conexión a la base de datos
+        db.close();
+
+    }
+
+
+    
+
+    res.send({state: "success" , message: 'Precio actualizado con éxito', infoDesc});
+
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
 const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, next) {
 
     const {id, modalidad_actual, sig_pago, sig_pago_timestamp} = req.body;
@@ -208,14 +258,14 @@ const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, n
 
 const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 
-    const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento, limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp} = req.body
+    const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento, limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp, status} = req.body
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
 
     
 
-    const command = `INSERT INTO descuentos(id, codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento,  limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp) 
-                    VALUES(@id, @codigo_descuento, @concepto_descuento, @nombre_descuento, @tipo_descuento, @valor_descuento, @limite_usos, @usos_actuales, @limite_usuario, @fecha_vencimiento, @fecha_vencimiento_timestamp)`;
+    const command = `INSERT INTO descuentos(id, codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento,  limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp, status) 
+                    VALUES(@id, @codigo_descuento, @concepto_descuento, @nombre_descuento, @tipo_descuento, @valor_descuento, @limite_usos, @usos_actuales, @limite_usuario, @fecha_vencimiento, @fecha_vencimiento_timestamp, @status)`;
                             
     const insert = db.prepare(command);
     
@@ -240,7 +290,8 @@ const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
         usos_actuales,
         limite_usuario, 
         fecha_vencimiento, 
-        fecha_vencimiento_timestamp
+        fecha_vencimiento_timestamp,
+        status
     };
 
     console.log({datosDescuento});
@@ -261,11 +312,18 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
       tipo_descuento,
       valor_descuento,
       limite_usos,
-      usos_actuales,
       limite_usuario,
       fecha_vencimiento,
       fecha_vencimiento_timestamp
     } = req.body;
+
+    const db = new Database(path.join(__dirname, '..', 'database', 'descuentos.db'));
+    
+    let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
+    const infoDesc = command.get(id);
+
+    const status = infoDesc.status;
+    const usos_actuales = infoDesc.usos_actuales;
 
     const datos = {
         codigo_descuento,
@@ -278,12 +336,12 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
         limite_usuario,
         fecha_vencimiento,
         fecha_vencimiento_timestamp,
+        status,
         id
     }
   
     console.log({datos});
 
-    const db = new Database(path.join(__dirname, '..', 'database', 'descuentos.db'));
   
     try {
         // Ejecutar la consulta de actualización
@@ -298,7 +356,8 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
             usos_actuales = ?, 
             limite_usuario = ?, 
             fecha_vencimiento = ?, 
-            fecha_vencimiento_timestamp = ? 
+            fecha_vencimiento_timestamp = ?,
+            status = ?
             WHERE id = ?`);
     
         const result = stmt.run(
@@ -312,11 +371,20 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
             limite_usuario,
             fecha_vencimiento,
             fecha_vencimiento_timestamp,
+            status,
             id
         );
     
         // Verificar si la actualización fue exitosa
         if (result.changes > 0) {
+
+            if( usos_actuales < limite_usos ){
+            
+                const stmt2 = db.prepare('UPDATE descuentos SET status = ? WHERE id = ?');
+                stmt2.run('true', id);
+            
+            }
+
             res.send({state: "success" , message : "Descuento actualizado exitosamente."});
         } else {
             res.send({state: "warning" , message : "No se encontró ningún descuento con el ID proporcionado."});
@@ -502,5 +570,6 @@ module.exports = {
     actPagoUser,
     updateUser,
     editarDesc,
-    getDescuento
+    getDescuento,
+    actDesc
 }

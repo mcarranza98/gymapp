@@ -108,9 +108,10 @@
                 <form id="modificarPrecioForm">
                     <div class="row">
                         <div class="mb-6 col-12">
-                            <label for="nuevo_precio" class="form-label">Nuevo precio</label>
-                            <input type="number" name="nuevo_precio" id="nuevo_precio"
-                                class="form-control CurrencyInput" aria-describedby="emailHelp">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">$</span>
+                                <input type="text" type="number" name="nuevo_precio" id="nuevo_precio" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -137,7 +138,7 @@
                 <form id="agregarDescForm">
                     <div class="row">
                         <div class="mb-2 col-12">
-                            <label for="nombre_descuento" class="form-label">Nombre</label>
+                            <label for="nombre_descuento" class="form-label">Descripción</label>
                             <input type="text" name="nombre_descuento" id="nombre_descuento"
                                 class="form-control CurrencyInput" aria-describedby="emailHelp">
                         </div>
@@ -315,11 +316,18 @@
 
 
             },
+            'rowCallback': function(row, data, index) {
+                console.log({data});
+                if ( data.status == 'false' ) {
+                    console.log('asd');
+                    $(row).css('background-color', '#F8D7DA');
+                }
+            },
             columns: [
-                { data: 'nombre_descuento', title: 'Nombre', width: '30%', visible: true },
-                { data: 'usos_totales', title: 'Usos', width: '15%', visible: true },
                 { data: 'codigo_descuento', title: 'Código', width: '15%', visible: true },
-                { data: 'tipo_descuento', title: 'Tipo', orderable: false, width: '15%' },
+                { data: 'usos_totales', title: 'Usos', width: '15%', visible: true },
+                { data: 'formattConceptos', title: 'Concepto', width: '15%', visible: true },
+                { data: 'formattTipo', title: 'Tipo', orderable: false, width: '15%' },
                 { data: 'valor_descuento', title: 'Valor', orderable: false, width: '15%' },
                 { class: 'details-control', orderable: false, data: null, defaultContent: action_iconsPD, width: '10%' },
             ],
@@ -437,7 +445,6 @@
             data.limite_usos = data.limite_usos != '' ? parseInt(data.limite_usos) : 999999;
             data.limite_usuario = data.limite_usuario != '' ? parseInt(data.limite_usuario) : 999999;
             data.valor_descuento = parseInt(data.valor_descuento);
-            data.usos_actuales = 0;
 
             console.log({data});
             console.log(data.fecha_vencimiento_timestamp);
@@ -457,6 +464,8 @@
                 message = updDesc.message;
 
             }else{
+
+                data.status = 'true';
 
                 const postDesc = await asyncPostAjax('/descuento/agregar', data);
 
@@ -543,6 +552,28 @@
 
         async function obtenerDescuentos() {
 
+            var infinito = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="30" height="30" viewBox="0 0 24 24" stroke-width="1.0" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9.828 9.172a4 4 0 1 0 0 5.656a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+            </svg>`;
+
+            let mapConceptos = {
+                'inscripcion': 'Inscripción',
+                'todos_conceptos': 'Todos',
+                'diario': 'Diario',
+                'semanal': 'Semanal',
+                'mensual': 'Mensual',
+                'bimestral': 'Bimestral',
+                'semestral': 'Semestral',
+                'anual': 'Anual',
+            }
+
+            let mapTipos = {
+                'precio_fijo': 'Precio fijo',
+                'porcentaje': 'Porcentaje',
+                'descontar_cantidad': 'Descontar cantidad',
+            }
+
             tablaPromos.clear().draw()
 
             var descuentos = await $.get('/gimnasio/obtener/descuentos');
@@ -550,7 +581,9 @@
             for (const row of descuentos.desc) {
 
                 console.log({row});
-                row.usos_totales = row.limite_usos == 999999 ? `${row.usos_actuales} / ilimitado` : `${row.usos_actuales} / ${row.limite_usos}`
+                row.usos_totales = row.limite_usos == 999999 ? `${row.usos_actuales} / ${infinito}` : `${row.usos_actuales} / ${row.limite_usos}`
+                row.formattTipo = mapTipos[row.tipo_descuento]
+                row.formattConceptos = mapConceptos[row.concepto_descuento]
 
             }
 
@@ -607,7 +640,7 @@
                 }
                 row.nombre_usuario = dataUser.datos ? dataUser.datos.nombre_usuario : row.nombre_usuario;
 
-                row.fecha = toDate(row.fecha_pago);
+                row.fecha = toDateWHours(row.fecha_pago);
 
                 nuevasRows.push(row)
 
@@ -616,6 +649,34 @@
             tablaPagos.rows.add(nuevasRows).draw();
 
         }
+
+
+
+        $('#concepto_descuento').on('select2:select', function(e) {
+            
+            var opcionSeleccionada = e.params.data.id;
+
+            if( opcionSeleccionada == 'todos_conceptos' ){
+
+                $('#tipo_descuento').val('porcentaje').trigger('change.select2');
+                $('#tipo_descuento').prop('disabled', true);
+
+            }else{
+
+                $('#tipo_descuento').prop('disabled', false);
+
+            }
+
+
+        });
+
+
+
+
+
+
+
+
 
 
         //Estadísticas
@@ -657,6 +718,20 @@
             const fechaFormateada = `${dia}/${mes}/${anio}`;
 
             return fechaFormateada;
+        }
+
+
+        function toDateWHours(timestamp) {
+            const date = new Date(timestamp);
+
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Los meses son base 0, por eso se suma 1
+            const year = date.getFullYear().toString().substr(-2); // Tomar los últimos 2 dígitos del año
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+            return formattedDate;
         }
 
 
