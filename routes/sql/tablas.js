@@ -72,6 +72,7 @@ const initPagos = `CREATE TABLE IF NOT EXISTS pagos (
                         id TEXT NOT NULL,
                         descuentos_aplicados TEXT NOT NULL,
                         fecha_pago INTEGER NOT NULL,
+                        fecha_sig_pago INTEGER NOT NULL,
                         id_usuario TEXT NOT NULL,
                         pago_concepto TEXT NOT NULL, 
                         pago_inscripcion TEXT NOT NULL,

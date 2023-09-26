@@ -513,7 +513,10 @@
             }
 
             try {
+                
+                var infoSigPago = sigPago(data.pago_concepto, data.fecha_pago);
 
+                data.fecha_sig_pago = infoSigPago.sig_pago_timestamp;
                 const postPago = await asyncPostAjax('/pagos/agregar', data);
 
                 if (postPago.state = 'success') {
@@ -524,7 +527,7 @@
 
                     //ACTUALIZAR LA INFORMACIÓN DEL USUARIO
 
-                    var infoSigPago = sigPago(data.pago_concepto, data.fecha_pago);
+                    
 
                     var datosUser = {
                         id: dataModal.id,

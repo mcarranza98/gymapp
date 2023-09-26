@@ -5,7 +5,8 @@ const { configuracion } = require('../configuracion');
 const {posts, cambiarPrecio, getConceptos, setPrecio, agregarDesc, 
     getDescuentos, eliminarDescuentos, eliminarUsuario, getPrecioConcepto, 
     agregarPago, getPagos, consultarUsuario, actPagoUser,editarDesc, getDescuento, actDesc,
-    updateUser} = require('../posts/posts');
+    updateUser, obtenerIntervaloIngreso, obtenerUsuariosActivos, obtenerIntervaloUsuarios,
+    obtenerUsuariosInactivos} = require('../posts/posts');
 
 
 module.exports = [
@@ -30,5 +31,9 @@ module.exports = [
     editarDesc,
     getDescuento,
     actDesc,
-    updateUser
+    updateUser,
+    obtenerIntervaloIngreso,
+    obtenerUsuariosActivos,
+    obtenerIntervaloUsuarios,
+    obtenerUsuariosInactivos
 ]

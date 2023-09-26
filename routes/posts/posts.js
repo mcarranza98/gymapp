@@ -42,8 +42,6 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
         sig_pago,
         sig_pago_timestamp,
     };
-     
-    console.log({datosUsuario});
     
     insertUsuario(datosUsuario);
 
@@ -198,8 +196,6 @@ const actDesc = router.post('/gimnasio/actualizar/descuento', function(req, res,
 
     const usos_actuales = infoDesc.usos_actuales;
 
-    console.log({usos_actuales});
-
     if ( usos_actuales < infoDesc.limite_usos ) {
         
         const stmt = db.prepare('UPDATE descuentos SET usos_actuales = ? WHERE id = ?');
@@ -240,8 +236,6 @@ const actDesc = router.post('/gimnasio/actualizar/descuento', function(req, res,
 const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, next) {
 
     const {id, modalidad_actual, sig_pago, sig_pago_timestamp} = req.body;
-
-    console.log({id});
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
 
@@ -293,8 +287,6 @@ const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
         fecha_vencimiento_timestamp,
         status
     };
-
-    console.log({datosDescuento});
     
     insertDescuento(datosDescuento);
 
@@ -339,9 +331,6 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
         status,
         id
     }
-  
-    console.log({datos});
-
   
     try {
         // Ejecutar la consulta de actualización
@@ -418,7 +407,6 @@ const getDescuento = router.post('/gimnasio/obtener/descuento', function(req, re
 
     const { id } = req.body;
 
-    console.log(id);
     const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
 
     let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
@@ -445,6 +433,101 @@ const eliminarDescuentos = router.post('/gimnasio/eliminar/descuentos', function
     } else {
         res.send({state: "warning" , message:'Ocurrio un problema elimando el descuento'});
     }
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+
+const obtenerIntervaloIngreso = router.post('/gimnasio/ingreso/intervalo', function(req, res, next) {
+
+    const { fechaInicio, fechaFin } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+
+    /*const query = `
+        SELECT *
+        FROM pagos
+        WHERE fecha_pago >= ? AND fecha_pago <= ?
+    `;*/
+
+    const query = `
+        SELECT *
+        FROM pagos
+        WHERE fecha_pago BETWEEN ? AND ?
+    `;
+
+    const resultados = db.prepare(query).all(fechaInicio, fechaFin);
+
+    res.send({state: "success" , resultados});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const obtenerUsuariosInactivos = router.post('/usuarios/inactivos', function(req, res, next) {
+
+    const { fechaInicio, fechaFin } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    const query = `
+        SELECT *
+        FROM usuarios
+        WHERE sig_pago_timestamp <= ? AND sig_pago_timestamp BETWEEN ? AND ?
+    `;
+
+    const resultados = db.prepare(query).all(fechaFin, fechaInicio, fechaFin);
+
+    res.send({state: "success" , resultados});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const obtenerIntervaloUsuarios = router.post('/gimnasio/usuarios/mensual', function(req, res, next) {
+
+    const { fechaInicio, fechaFin } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+
+    const query = `
+        SELECT *
+        FROM usuarios
+        WHERE fecha_ingreso_timestamp >= ? AND fecha_ingreso_timestamp <= ?
+    `;
+
+    const resultados = db.prepare(query).all(fechaInicio, fechaFin);
+
+    res.send({state: "success" , resultados});
+    
+    // Cerrar la conexión a la base de datos
+    db.close();
+
+});
+
+
+const obtenerUsuariosActivos = router.post('/gimnasio/usuarios/activos', function(req, res, next) {
+
+    const { fechaActual } = req.body;
+
+    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+
+    const query = `
+        SELECT *
+        FROM pagos
+        WHERE fecha_sig_pago >= ?
+    `;
+
+    const resultados = db.prepare(query).all(fechaActual);
+
+    res.send({state: "success" , resultados});
     
     // Cerrar la conexión a la base de datos
     db.close();
@@ -492,13 +575,13 @@ const consultarUsuario = router.post('/usuarios/consultar/', function(req, res, 
 
 const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
 
-    const {descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario} = req.body
+    const {descuentos_aplicados, fecha_pago, id_usuario,fecha_sig_pago , pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario} = req.body
 
     const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
 
 
-    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario) 
-                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad, @nombre_usuario)`;
+    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, fecha_sig_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario) 
+                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @fecha_sig_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad, @nombre_usuario)`;
                             
     const insert = db.prepare(command);
     
@@ -516,6 +599,7 @@ const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
         id: uuid,
         descuentos_aplicados,
         fecha_pago,
+        fecha_sig_pago,
         id_usuario,
         pago_concepto,
         pago_inscripcion,
@@ -528,8 +612,6 @@ const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
         nombre_usuario
     };
      
-    console.log({datosPago});
-    
     insertPago(datosPago);
 
     db.close();
@@ -571,5 +653,9 @@ module.exports = {
     updateUser,
     editarDesc,
     getDescuento,
-    actDesc
+    actDesc,
+    obtenerIntervaloIngreso,
+    obtenerUsuariosActivos,
+    obtenerIntervaloUsuarios,
+    obtenerUsuariosInactivos
 }
