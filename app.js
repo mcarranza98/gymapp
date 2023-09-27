@@ -6,8 +6,8 @@ var logger = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 
 
-const routes = require('./routes/routing/routes')
-const sql = require('./routes/sql/tablas')
+const router = require('./routes/router/routes')
+const sql = require('./sql/tablas')
 const main = require('./src/main')
 
 var app = express();
@@ -27,7 +27,7 @@ app.set('layout', path.resolve(__dirname,'views/layouts/main.ejs'));
 app.set('views', path.resolve( __dirname, 'views'));
 
 
-app.use(routes);
+app.use(router.routes);
 
 
 // catch 404 and forward to error handler

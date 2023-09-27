@@ -4,13 +4,62 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
+router.get('/configuracion', function(req, res, next) {
+    res.render('configuracion', { title: 'Configuración' });
+});
+
+router.get('/gimnasio', function(req, res, next) {
+    res.render('gimnasio', { title: 'Gimnasio' });
+});
+
+router.get('/', function(req, res, next) {
+
+    res.render('index', { title: 'Inicio' });
+  
+});
 
 
-const posts = router.post('/usuarios/agregar', function(req, res, next) {
+router.get('/users', function(req, res, next) {
+    res.send('respond with a resource');
+});
+
+
+router.get('/usuarios', function(req, res, next) {
+    res.render('usuarios', { title: 'Usuarios' });
+  });
+  
+  
+router.get('/usuarios/cargar', function(req, res, next) {
+    
+      try{
+  
+        const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
+  
+          db.pragma('journal_mode = WAL');
+  
+          const command = db.prepare('SELECT * FROM usuarios');
+          const usuarios = command.all();
+  
+  
+          db.close();
+          res.send({ res: usuarios });
+  
+      }catch(e){
+  
+          console.log(e);
+  
+      }
+      
+  
+  
+});
+
+
+router.post('/usuarios/agregar', function(req, res, next) {
 
     const {nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp} = req.body
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
 
     const command = `INSERT INTO usuarios(id, nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp) 
@@ -50,11 +99,11 @@ const posts = router.post('/usuarios/agregar', function(req, res, next) {
 });
 
 
-const updateUser = router.post('/usuarios/actualizar', function(req, res, next) {
+router.post('/usuarios/actualizar', function(req, res, next) {
 
     const {nombre_usuario, telefono_usuario, radio_sexo, fecha_nacimiento, nombre_contacto, telefono_contacto, modalidad_actual, fecha_ingreso, fecha_ingreso_timestamp, sig_pago, sig_pago_timestamp, id} = req.body
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     const datos = {
 
@@ -111,9 +160,9 @@ const updateUser = router.post('/usuarios/actualizar', function(req, res, next) 
 });
 
 
-const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, res, next) {
+router.post('/gimnasio/agregar/concepto', function(req, res, next) {
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'gimnasio.db'));
 
     const insertStatement = db.prepare('INSERT INTO conceptos (secuencia, id, concepto_pago, precio_pago) VALUES (?, ?, ?, ?)');
 
@@ -125,7 +174,7 @@ const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, re
         { secuencia: 5,id: '98471aec-3835-4abc-baf7-fcdd407c6e09', concepto_pago: 'Bimestre', precio_pago: 0.00 },
         { secuencia: 6,id: '4d0d79d8-37ce-471f-a135-362b881a5965', concepto_pago: 'Semestre', precio_pago: 0.00 },
         { secuencia: 7,id: '5b9ee11f-21e5-4409-97d7-73a1664d80bc', concepto_pago: 'Año', precio_pago: 0.00 }
-    ];secuencia: 1,
+    ];
 
     usuarios.forEach(usuario => {
     insertStatement.run(usuario.secuencia, usuario.id, usuario.concepto_pago, usuario.precio_pago);
@@ -137,9 +186,9 @@ const cambiarPrecio = router.post('/gimnasio/agregar/concepto', function(req, re
 });
 
 
-const getConceptos = router.get('/gimnasio/obtener/conceptos', function(req, res, next) {
+router.get('/gimnasio/obtener/conceptos', function(req, res, next) {
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'gimnasio.db'));
 
     let command = db.prepare('SELECT * FROM conceptos');
     const orders = command.all();
@@ -151,11 +200,11 @@ const getConceptos = router.get('/gimnasio/obtener/conceptos', function(req, res
 
 });
 
-const getPrecioConcepto = router.post('/gimnasio/concepto/info', function(req, res, next) {
+router.post('/gimnasio/concepto/info', function(req, res, next) {
 
     const {id} = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'gimnasio.db'));
 
     let command = db.prepare('SELECT * FROM conceptos WHERE id = ?');
     const concepto = command.get(id);
@@ -168,11 +217,11 @@ const getPrecioConcepto = router.post('/gimnasio/concepto/info', function(req, r
 });
 
 
-const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, next) {
+router.post('/gimnasio/actualizar/precio', function(req, res, next) {
 
     const {id, precio_pago} = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'gimnasio.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'gimnasio.db'));
 
     const stmt = db.prepare('UPDATE conceptos SET precio_pago = ? WHERE id = ?');
     const result = stmt.run(precio_pago, id);
@@ -185,11 +234,11 @@ const setPrecio = router.post('/gimnasio/actualizar/precio', function(req, res, 
 });
 
 
-const actDesc = router.post('/gimnasio/actualizar/descuento', function(req, res, next) {
+router.post('/gimnasio/actualizar/descuento', function(req, res, next) {
 
     const {id} = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'descuentos.db'));
 
     let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
     const infoDesc = command.get(id);
@@ -233,11 +282,11 @@ const actDesc = router.post('/gimnasio/actualizar/descuento', function(req, res,
 });
 
 
-const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, next) {
+router.post('/usuario/actualizar/pago', function(req, res, next) {
 
     const {id, modalidad_actual, sig_pago, sig_pago_timestamp} = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     const stmt = db.prepare('UPDATE usuarios SET modalidad_actual = ?, sig_pago = ?, sig_pago_timestamp = ? WHERE id = ?');
     const result = stmt.run(modalidad_actual, sig_pago, sig_pago_timestamp, id);
@@ -250,11 +299,11 @@ const actPagoUser = router.post('/usuario/actualizar/pago', function(req, res, n
 });
 
 
-const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
+router.post('/descuento/agregar', function(req, res, next) {
 
     const {codigo_descuento, concepto_descuento, nombre_descuento, tipo_descuento, valor_descuento, limite_usos, usos_actuales, limite_usuario, fecha_vencimiento, fecha_vencimiento_timestamp, status} = req.body
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'descuentos.db'));
 
     
 
@@ -295,7 +344,7 @@ const agregarDesc = router.post('/descuento/agregar', function(req, res, next) {
 });
 
 
-const editarDesc = router.post('/descuento/actualizar', function(req, res, next) {
+router.post('/descuento/actualizar', function(req, res, next) {
     const {
       id,
       codigo_descuento,
@@ -388,9 +437,10 @@ const editarDesc = router.post('/descuento/actualizar', function(req, res, next)
     db.close();
   });
 
-const getDescuentos = router.get('/gimnasio/obtener/descuentos', function(req, res, next) {
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+router.get('/gimnasio/obtener/descuentos', function(req, res, next) {
+
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'descuentos.db'));
 
     let command = db.prepare('SELECT * FROM descuentos');
     const desc = command.all();
@@ -403,11 +453,11 @@ const getDescuentos = router.get('/gimnasio/obtener/descuentos', function(req, r
 });
 
 
-const getDescuento = router.post('/gimnasio/obtener/descuento', function(req, res, next) {
+router.post('/gimnasio/obtener/descuento', function(req, res, next) {
 
     const { id } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'descuentos.db'));
 
     let command = db.prepare('SELECT * FROM descuentos WHERE id = ?');
     const desc = command.get(id);
@@ -419,11 +469,11 @@ const getDescuento = router.post('/gimnasio/obtener/descuento', function(req, re
 
 });
 
-const eliminarDescuentos = router.post('/gimnasio/eliminar/descuentos', function(req, res, next) {
+router.post('/gimnasio/eliminar/descuentos', function(req, res, next) {
 
     const { id } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'descuentos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'descuentos.db'));
 
     const stmt = db.prepare('DELETE FROM descuentos WHERE id = ?');
     const result = stmt.run(id);
@@ -441,11 +491,11 @@ const eliminarDescuentos = router.post('/gimnasio/eliminar/descuentos', function
 
 
 
-const obtenerIntervaloIngreso = router.post('/gimnasio/ingreso/intervalo', function(req, res, next) {
+router.post('/gimnasio/ingreso/intervalo', function(req, res, next) {
 
     const { fechaInicio, fechaFin } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'pagos.db'));
 
     /*const query = `
         SELECT *
@@ -469,11 +519,11 @@ const obtenerIntervaloIngreso = router.post('/gimnasio/ingreso/intervalo', funct
 });
 
 
-const obtenerUsuariosInactivos = router.post('/usuarios/inactivos', function(req, res, next) {
+router.post('/usuarios/inactivos', function(req, res, next) {
 
     const { fechaInicio, fechaFin } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     const query = `
         SELECT *
@@ -491,11 +541,11 @@ const obtenerUsuariosInactivos = router.post('/usuarios/inactivos', function(req
 });
 
 
-const obtenerIntervaloUsuarios = router.post('/gimnasio/usuarios/mensual', function(req, res, next) {
+router.post('/gimnasio/usuarios/mensual', function(req, res, next) {
 
     const { fechaInicio, fechaFin } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     const query = `
         SELECT *
@@ -513,11 +563,11 @@ const obtenerIntervaloUsuarios = router.post('/gimnasio/usuarios/mensual', funct
 });
 
 
-const obtenerUsuariosActivos = router.post('/gimnasio/usuarios/activos', function(req, res, next) {
+router.post('/gimnasio/usuarios/activos', function(req, res, next) {
 
     const { fechaActual } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'pagos.db'));
 
     const query = `
         SELECT *
@@ -535,11 +585,11 @@ const obtenerUsuariosActivos = router.post('/gimnasio/usuarios/activos', functio
 });
 
 
-const eliminarUsuario = router.post('/usuarios/eliminar/', function(req, res, next) {
+router.post('/usuarios/eliminar/', function(req, res, next) {
 
     const { id } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     const stmt = db.prepare('DELETE FROM usuarios WHERE id = ?');
     const result = stmt.run(id);
@@ -556,11 +606,11 @@ const eliminarUsuario = router.post('/usuarios/eliminar/', function(req, res, ne
 });
 
 
-const consultarUsuario = router.post('/usuarios/consultar/', function(req, res, next) {
+router.post('/usuarios/consultar/', function(req, res, next) {
 
     const { id } = req.body;
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'usuarios.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'usuarios.db'));
 
     let command = db.prepare('SELECT * FROM usuarios WHERE id=?');
     const datos = command.get(id);
@@ -573,11 +623,11 @@ const consultarUsuario = router.post('/usuarios/consultar/', function(req, res, 
 });
 
 
-const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
+router.post('/pagos/agregar', function(req, res, next) {
 
     const {descuentos_aplicados, fecha_pago, id_usuario,fecha_sig_pago , pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario} = req.body
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'pagos.db'));
 
 
     const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, fecha_sig_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario) 
@@ -619,9 +669,9 @@ const agregarPago = router.post('/pagos/agregar', function(req, res, next) {
 });
 
 
-const getPagos = router.get('/gimnasio/obtener/pagos', function(req, res, next) {
+router.get('/gimnasio/obtener/pagos', function(req, res, next) {
 
-    const db = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db'));
+    const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'pagos.db'));
 
     let command = db.prepare('SELECT * FROM pagos');
     const orders = command.all();
@@ -633,29 +683,4 @@ const getPagos = router.get('/gimnasio/obtener/pagos', function(req, res, next) 
 
 });
 
-
-
-// module.exports = router;
-module.exports = {
-    posts,
-    cambiarPrecio,
-    getConceptos,
-    setPrecio,
-    agregarDesc,
-    getDescuentos,
-    eliminarDescuentos,
-    eliminarUsuario,
-    getPrecioConcepto,
-    agregarPago,
-    getPagos,
-    consultarUsuario,
-    actPagoUser,
-    updateUser,
-    editarDesc,
-    getDescuento,
-    actDesc,
-    obtenerIntervaloIngreso,
-    obtenerUsuariosActivos,
-    obtenerIntervaloUsuarios,
-    obtenerUsuariosInactivos
-}
+module.exports = {routes: router}
