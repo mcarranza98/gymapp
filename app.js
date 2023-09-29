@@ -28,6 +28,7 @@ app.set('views', path.resolve( __dirname, 'views'));
 
 
 app.use(router.routes);
+app.use(cookieParser())
 
 
 // catch 404 and forward to error handler

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var cookieParser = require('cookie-parser')
 const Database = require('better-sqlite3');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -14,7 +15,32 @@ router.get('/gimnasio', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
 
-    res.render('index', { title: 'Inicio' });
+    if( req.cookies.cuenta ){
+        res.render('index', { title: 'Inicio' });
+    }else{
+        res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+    }
+  
+});
+
+
+router.get('/sign-in', function(req, res, next) {
+
+    res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+  
+});
+
+router.get('/precios', function(req, res, next) {
+
+    res.render('precios', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+  
+});
+
+
+
+router.get('/sign-up', function(req, res, next) {
+
+    res.render('sign-up', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
   
 });
 
@@ -26,9 +52,17 @@ router.get('/users', function(req, res, next) {
 
 router.get('/usuarios', function(req, res, next) {
     res.render('usuarios', { title: 'Usuarios' });
-  });
+});
   
-  
+router.post('/agregar-cuenta', function(req, res, next) {
+
+    const { cuenta } = req.body;
+
+    res.cookie('cuenta', cuenta).send('Cookie establecida');
+
+});
+
+
 router.get('/usuarios/cargar', function(req, res, next) {
     
       try{

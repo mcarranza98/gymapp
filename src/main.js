@@ -10,8 +10,6 @@ async function crearConceptos(){
     let command = db_questions.prepare('SELECT * FROM conceptos' );
     const orders = command.all();
 
-    console.log(orders);
-    console.log({orders:orders.length});
 
     if( orders.length == 0 ){
         console.log('hola');

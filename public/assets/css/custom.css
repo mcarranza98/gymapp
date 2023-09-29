@@ -96,3 +96,31 @@ table.dataTable.no-footer {
     border-bottom: 0px solid rgba(0, 0, 0, 0.3);
 }
 
+.app-auth-sign-in .app-auth-background-custom {
+    background: url(../images/backgrounds/img-sign-in.png) no-repeat;
+    background-size: 60%;
+    background-position: center;
+}
+
+.app-auth-lock-screen .app-auth-background-custom, .app-auth-sign-in .app-auth-background-custom, .app-auth-sign-up .app-auth-background-custom {
+    flex: 1;
+    height: 100%;
+    content: '';
+    display: block;
+}
+
+
+
+.app-auth-sign-up .app-auth-background-customsu {
+    background: url(../images/backgrounds/img-sign-up.png) no-repeat;
+    background-size: 60%;
+    background-position: center;
+}
+
+.app-auth-lock-screen .app-auth-background-customsu, .app-auth-sign-in .app-auth-background-customsu, .app-auth-sign-up .app-auth-background-customsu {
+    flex: 1;
+    height: 100%;
+    content: '';
+    display: block;
+}
+
