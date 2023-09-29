@@ -6,11 +6,36 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 router.get('/configuracion', function(req, res, next) {
-    res.render('configuracion', { title: 'Configuración' });
+    
+
+    if( req.cookies.cuenta ){
+        res.render('configuracion', { title: 'Configuración' });
+    }else{
+        res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+    }
+      
+
 });
 
 router.get('/gimnasio', function(req, res, next) {
-    res.render('gimnasio', { title: 'Gimnasio' });
+    
+
+    if( req.cookies.cuenta ){
+        res.render('gimnasio', { title: 'Gimnasio' });
+    }else{
+        res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+    }
+
+});
+
+router.get('/usuarios', function(req, res, next) {
+
+    if( req.cookies.cuenta ){
+        res.render('usuarios', { title: 'Usuarios' });
+    }else{
+        res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+    }
+
 });
 
 router.get('/', function(req, res, next) {
@@ -22,7 +47,6 @@ router.get('/', function(req, res, next) {
     }
   
 });
-
 
 router.get('/sign-in', function(req, res, next) {
 
@@ -36,24 +60,12 @@ router.get('/precios', function(req, res, next) {
   
 });
 
-
-
 router.get('/sign-up', function(req, res, next) {
 
     res.render('sign-up', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
   
 });
 
-
-router.get('/users', function(req, res, next) {
-    res.send('respond with a resource');
-});
-
-
-router.get('/usuarios', function(req, res, next) {
-    res.render('usuarios', { title: 'Usuarios' });
-});
-  
 router.post('/agregar-cuenta', function(req, res, next) {
 
     const { cuenta } = req.body;
@@ -61,7 +73,6 @@ router.post('/agregar-cuenta', function(req, res, next) {
     res.cookie('cuenta', cuenta).send('Cookie establecida');
 
 });
-
 
 router.get('/usuarios/cargar', function(req, res, next) {
     
@@ -83,8 +94,6 @@ router.get('/usuarios/cargar', function(req, res, next) {
           console.log(e);
   
       }
-      
-  
   
 });
 
