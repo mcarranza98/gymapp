@@ -1,62 +1,91 @@
 <div class="row">
-    <div class="col">
-        <div class="page-description">
-            <h1>Inicio</h1>
-        </div>
+  <div class="col">
+    <div class="page-description">
+      <h1>Inicio</h1>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-12">
-        <div class="card widget widget-stats">
+  <div class="col-12">
+    <div>
+      <div class="row">
+
+        <div class="col-xl-4">
+          <div class="card widget widget-stats">
             <div class="card-body">
-                <canvas id="miGrafico"></canvas>
+              <div class="widget-stats-container d-flex">
+                <div class="widget-stats-icon widget-stats-icon-primary">
+                  <i class="material-icons-outlined">person</i>
+                </div>
+                <div class="widget-stats-content flex-fill">
+                  <span class="widget-stats-title">Usuarios activos</span>
+                  <span class="widget-stats-amount" id="cantUsuariosActivos">...</span>
+                  <span class="widget-stats-info" id="usuariosUnicosMes">...</span>
+                </div>
+                <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">
+                  <i class="material-icons">keyboard_arrow_up</i> 12%
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+
+        <div class="col-xl-4">
+          <div class="card widget widget-stats">
+            <div class="card-body">
+              <div class="widget-stats-container d-flex">
+                <div class="widget-stats-icon widget-stats-icon-warning">
+                  <i class="material-icons-outlined">person</i>
+                </div>
+                <div class="widget-stats-content flex-fill">
+                  <span class="widget-stats-title">Usuarios no renovados</span>
+                  <span class="widget-stats-amount" id="cantUsuariosNoRenovados">...</span>
+                  <span class="widget-stats-info" id="periodoNoRenovados">...</span>
+                </div>
+                <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">
+                  <i class="material-icons">keyboard_arrow_up</i> 5%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+          <div class="card widget widget-stats">
+            <div class="card-body">
+              <div class="widget-stats-container d-flex">
+                <div class="widget-stats-icon widget-stats-icon-primary">
+                  <i class="material-icons-outlined">schedule</i>
+                </div>
+                <div class="widget-stats-content flex-fill">
+                  <span class="widget-stats-title">Hora más concurrida</span>
+                  <span class="widget-stats-amount">19:00</span>
+                  <span class="widget-stats-info">87 usuarios</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12">
+          <div class="section-body">
+            <div class="row">
+              <div class="mb-4">
+                <h3 class="pt-2">Usuarios nuevos mensuales</h3>
+              </div>
+              <canvas id="usuariosActivosGrafico"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>
 
 
 
-<script>
-
-
-
-$(document).ready(async function () {
-
-    var ctx = document.getElementById('miGrafico').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
-        datasets: [{
-          label: 'Usuarios mensuales',
-          data: [140, 127, 155, 227],
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-
-
-
-
-
-})
-
-
-
-
-
-
-
-</script>
+<script src="../assets/scripts/inicio/inicio.js"></script>

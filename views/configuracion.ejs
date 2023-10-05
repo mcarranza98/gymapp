@@ -7,25 +7,49 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <div class="card widget widget-stats">
+        <div class="card">
             <div class="card-body">
-                <div class="widget-stats-container d-flex">
-                    <div class="widget-stats-icon widget-stats-icon-primary">
-                        <i class="material-icons-outlined">paid</i>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="settingsInputEmail" class="form-label">Nombre del gimnasio</label>
+                        <input type="email" class="form-control" id="settingsInputEmail" aria-describedby="settingsEmailHelp" placeholder="FitSol">
+                        <div id="settingsEmailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
-                    <div class="widget-stats-content flex-fill">
-                        <span class="widget-stats-title">Today's Sales</span>
-                        <span class="widget-stats-amount">$38,211</span>
-                        <span class="widget-stats-info">471 Orders Total</span>
+                    <div class="col-md-6">
+                        <label for="settingsPhoneNumber" class="form-label">Encargado</label>
+                        <input type="text" class="form-control" id="settingsPhoneNumber" placeholder="miusuario@fitsol.com">
                     </div>
-                    <div class="widget-stats-indicator widget-stats-indicator-negative align-self-start">
-                        <i class="material-icons">keyboard_arrow_down</i> 4%
+                </div>
+                <div class="row m-t-lg">
+                    <div class="col-md-12">
+                        <label for="settingsInputFirstName" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="settingsInputFirstName" placeholder="John">
+                    </div>
+                </div>
+                <div class="row m-t-lg">
+                    <div class="col-md-6">
+                        <label for="settingsPhoneNumber" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="settingsPhoneNumber" placeholder="miusuario@fitsol.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="settingsPhoneNumber" class="form-label">Correo electrónico</label>
+                        <input type="text" class="form-control" id="settingsPhoneNumber" placeholder="miusuario@fitsol.com">
+                    </div>
+                </div>
+                <div class="row m-t-lg">
+                    <div class="col">
+                        <label for="settingsAbout" class="form-label">About</label>
+                        <textarea class="form-control" id="settingsAbout" maxlength="500" rows="4" aria-describedby="settingsAboutHelp"></textarea>
+                        <div id="emailHelp" class="form-text">Brief information about you to display on profile (max: 500 characters)</div>
+                    </div>
+                </div>
+                <div class="row m-t-lg">
+                    <div class="col">
+                        
+                        <a href="#" class="btn btn-primary m-t-sm">Update</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
-

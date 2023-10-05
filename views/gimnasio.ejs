@@ -9,16 +9,20 @@
 
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Precios</button>
+            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Precios</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Descuentos</button>
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Descuentos</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Historial pagos</button>
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Historial pagos</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-graficos-tab" data-bs-toggle="pill" data-bs-target="#pills-graficos" type="button" role="tab" aria-controls="pills-graficos" aria-selected="false">Estadísticas</button>
+            <button class="nav-link" id="pills-graficos-tab" data-bs-toggle="pill" data-bs-target="#pills-graficos"
+                type="button" role="tab" aria-controls="pills-graficos" aria-selected="false">Estadísticas</button>
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
@@ -45,8 +49,8 @@
                     <div class="section-body">
                         <div class="d-flex justify-content-between mb-4">
                             <h3 class="pt-2">Promociones / descuentos</h3>
-                            <button id="btnSubmitAgregarDesc" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"
-                                class="btn btn-primary">Agregar</button>
+                            <button id="btnSubmitAgregarDesc" type="button" data-bs-toggle="modal"
+                                data-bs-target="#modalAgregarDesc" class="btn btn-primary">Agregar</button>
                         </div>
                         <table id="listaPromosTable" class="hover" style="width:100%">
                             <thead>
@@ -93,9 +97,6 @@
                                     <span class="widget-stats-amount" id="ingMensualesSpan">...</span>
                                     <span class="widget-stats-info" id="cantMovimientos">...</span>
                                 </div>
-                                <div class="widget-stats-indicator widget-stats-indicator-negative align-self-start">
-                                    <i class="material-icons">keyboard_arrow_down</i> 4%
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -111,9 +112,6 @@
                                     <span class="widget-stats-title">Ingresos anuales</span>
                                     <span class="widget-stats-amount" id="ingAnualesSpan">...</span>
                                     <span class="widget-stats-info" id="cantMovimientosAnual">...</span>
-                                </div>
-                                <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">
-                                    <i class="material-icons">keyboard_arrow_up</i> 36%
                                 </div>
                             </div>
                         </div>
@@ -136,8 +134,8 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="row">
+
+            <div class="row d-flex justify-content-between">
 
                 <div class="col-xl-4">
                     <div class="card widget widget-stats">
@@ -150,9 +148,6 @@
                                     <span class="widget-stats-title">Usuarios activos</span>
                                     <span class="widget-stats-amount" id="cantUsuariosActivos">...</span>
                                     <span class="widget-stats-info" id="usuariosUnicosMes">...</span>
-                                </div>
-                                <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">
-                                    <i class="material-icons">keyboard_arrow_up</i> 12%
                                 </div>
                             </div>
                         </div>
@@ -170,9 +165,6 @@
                                     <span class="widget-stats-title">Usuarios no renovados</span>
                                     <span class="widget-stats-amount" id="cantUsuariosNoRenovados">...</span>
                                     <span class="widget-stats-info" id="periodoNoRenovados">...</span>
-                                </div>
-                                <div class="widget-stats-indicator widget-stats-indicator-positive align-self-start">
-                                    <i class="material-icons">keyboard_arrow_up</i> 5%
                                 </div>
                             </div>
                         </div>
@@ -227,7 +219,8 @@
                         <div class="mb-6 col-12">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">$</span>
-                                <input type="text" type="number" name="nuevo_precio" id="nuevo_precio" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                                <input type="text" type="number" name="nuevo_precio" id="nuevo_precio"
+                                    class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
                             </div>
                         </div>
                     </div>
@@ -266,8 +259,8 @@
                         </div>
                         <div class="mb-2 col-6">
                             <label for="concepto_descuento" class="form-label">Concepto</label>
-                            <select style="width: 100%;" class="form-select" id="concepto_descuento" name="concepto_descuento"
-                                aria-label="Selecciona la modalidad">
+                            <select style="width: 100%;" class="form-select" id="concepto_descuento"
+                                name="concepto_descuento" aria-label="Selecciona la modalidad">
                                 <option value="" selected></option>
                                 <option value="inscripcion">Inscripción</option>
                                 <option value="todos_conceptos">Todos los reingresos (Sólo aplica porcentaje)</option>
@@ -291,8 +284,8 @@
                         </div>
                         <div class="mb-2 col-6">
                             <label for="valor_descuento" class="form-label">Valor</label>
-                            <input type="text" name="valor_descuento" id="valor_descuento"
-                                class="form-control" aria-describedby="emailHelp">
+                            <input type="text" name="valor_descuento" id="valor_descuento" class="form-control"
+                                aria-describedby="emailHelp">
                         </div>
 
                         <hr class="mt-4">
@@ -301,24 +294,24 @@
 
                         <div class="mb-2 col-4">
                             <label for="limite_usos" class="form-label">Limite de usos</label>
-                            <input type="number" min="0" name="limite_usos" id="limite_usos"
-                                class="form-control" aria-describedby="emailHelp">
+                            <input type="number" min="0" name="limite_usos" id="limite_usos" class="form-control"
+                                aria-describedby="emailHelp">
                             <div id="passwordHelpBlock" class="form-text">
-                                Límite de veces que el cupón puede ser usado.
+                                Límite de veces que el cupón puede ser usado. <br>Si no se pone nada, los usos serán ilimitados.
                             </div>
                         </div>
                         <div class="mb-2 col-4">
                             <label for="limite_usuario" class="form-label">Limite de usos por usuario</label>
-                            <input type="number" min="0" name="limite_usuario" id="limite_usuario"
-                                class="form-control" aria-describedby="emailHelp">
+                            <input type="number" min="0" name="limite_usuario" id="limite_usuario" class="form-control"
+                                aria-describedby="emailHelp">
                             <div id="passwordHelpBlock" class="form-text">
-                                Límite de veces que el cupón puede ser aplicado a un mismo usuario.
+                                Límite de veces que el cupón puede ser aplicado a un mismo usuario.<br>Si no se pone nada los usos serán ilimitados.
                             </div>
                         </div>
                         <div class="mb-2 col-4">
                             <label for="fecha_vencimiento" class="form-label">Fecha de vencimiento</label>
-                            <input type="date" name="fecha_vencimiento" id="fecha_vencimiento"
-                                class="form-control" min="" aria-describedby="emailHelp">
+                            <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control"
+                                min="" aria-describedby="emailHelp">
                             <div id="passwordHelpBlock" class="form-text">
                                 Fecha de caducidad del cupón, si no se aplica el cupón no caducará.
                             </div>
@@ -337,7 +330,8 @@
 
 <!-- MODAL ELIMINAR DESCUENTO -->
 
-<div class="modal fade" id="eliminarDescuento" tabindex="-1" aria-labelledby="eliminarDescuentoLabel" aria-hidden="true">
+<div class="modal fade" id="eliminarDescuento" tabindex="-1" aria-labelledby="eliminarDescuentoLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -349,810 +343,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">No, cancelar.</button>
-                <button type="button" id="btnEliminarDescuento" class="btn btn-danger" data-bs-dismiss="modal">Sí, eliminar.</button>
+                <button type="button" id="btnEliminarDescuento" class="btn btn-danger" data-bs-dismiss="modal">Sí,
+                    eliminar.</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
 
-    const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
-                                <a data-bs-toggle="modal" data-bs-target="#modalModificarPrecio"><i class="material-icons-two-tone">edit</i></a>
-                            </div>`;
-
-
-
-    $(document).ready(async function () {
-
-
-        //INIXIALIZAR SELECT2
-        var select2Concepto = $('#concepto_descuento').select2({
-            minimumResultsForSearch: Infinity,
-            placeholder: 'Selecciona una opción',
-            allowClear: true
-        });
-
-        var select2Tipo = $('#tipo_descuento').select2({
-            minimumResultsForSearch: Infinity,
-            placeholder: 'Selecciona una opción',
-            allowClear: true
-        });
-
-
-        //Bloquear fechas anteriores al día actual
-        // Obtén el elemento input de tipo date
-        const inputFecha = document.getElementById("fecha_vencimiento");
-
-        // Obtiene la fecha actual en el formato "YYYY-MM-DD"
-        const fechaActualVenc = new Date().toISOString().split("T")[0];
-
-        // Establece la fecha mínima permitida en el campo de fecha
-        inputFecha.setAttribute("min", fechaActualVenc);
-
-
-
-        var tablaPrecios = $('#listaPreciosTable').DataTable({
-            "initComplete": function (settings, json) {
-
-
-            },
-            dom: 'lrt',
-            columns: [
-                { data: 'secuencia', title: 'secuencia', visible: false },
-                { data: 'id', title: 'id', visible: false },
-                { data: 'concepto_pago', title: 'Concepto', width: '50%', visible: true },
-                { data: 'precioFormatted', title: 'Precio', orderable: false, width: '35%' },
-                { title: '', class: 'details-control', orderable: false, data: null, defaultContent: action_iconsNP, width: '15%' },
-            ],
-            autoWidth: false,
-            search: {
-                return: true,
-            },
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
-            },
-            info: false,
-            paging: false,
-            targets: 'no-sort',
-            bSort: true,
-            order: [[0, 'asc']],
-
-        });
-
-        obtenerConceptos();
-        
-
-        const action_iconsPD = `<div class="d-flex order-actions buttonsActions" bis_skin_checked="1">	
-                                    <a id="btnUpdDesc" data-bs-toggle="modal" data-bs-target="#modalAgregarDesc"><i class="material-icons-two-tone">edit</i></a>
-                                    <a data-bs-toggle="modal" data-bs-target="#eliminarDescuento"><i class="material-icons-two-tone">delete</i></a>
-                                </div>`;
-
-        var tablaPromos = $('#listaPromosTable').DataTable({
-            "initComplete": function (settings, json) {
-
-
-            },
-            'rowCallback': function(row, data, index) {
-                if ( data.status == 'false' ) {
-                    $(row).css('background-color', '#F8D7DA');
-                }
-            },
-            columns: [
-                { data: 'codigo_descuento', title: 'Código', width: '15%', visible: true },
-                { data: 'usos_totales', title: 'Usos', width: '15%', visible: true },
-                { data: 'formattConceptos', title: 'Concepto', width: '15%', visible: true },
-                { data: 'formattTipo', title: 'Tipo', orderable: false, width: '15%' },
-                { data: 'valor_descuento', title: 'Valor', orderable: false, width: '15%' },
-                { class: 'details-control', orderable: false, data: null, defaultContent: action_iconsPD, width: '10%' },
-            ],
-            autoWidth: false,
-            search: {
-                return: true,
-            },
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
-            },
-            info: false,
-            paging: true,
-            pageLength: 10, 
-            searching: true,
-            pagingType: 'full_numbers',
-            targets: 'no-sort',
-            bSort: true,
-            order: [[0, 'asc']],
-
-        });
-
-        obtenerDescuentos();
-
-        var tablaPagos = $('#historialPagosTable').DataTable({
-            "initComplete": function (settings, json) {
-
-            },
-            columns: [
-                { data: 'fecha_pago', title: '', visible: false },
-                { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
-                { data: 'nombre_usuario', title: 'Usuario', width: '35%', visible: true },
-                { data: 'pago_concepto', title: 'Concepto', width: '15%', visible: true },
-                { data: 'pago_inscripcion_text', title: 'Inscripción', width: '15%', visible: true },
-                { data: 'precio_total', title: 'Total', width: '15%', orderable: true }
-            ],
-            autoWidth: false,
-            search: {
-                return: true,
-            },
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
-            },
-            info: false,
-            paging: true,
-            pageLength: 10, 
-            searching: true,
-            pagingType: 'full_numbers',
-            targets: 'no-sort',
-            bSort: true,
-            order: [[0, 'desc']],
-
-        });
-
-        await obtenerPagos();
-
-        async function obtenerConceptos() {
-
-            tablaPrecios.clear().draw()
-
-            var conceptos = await $.get('/gimnasio/obtener/conceptos');
-
-            var nuevasRows = [];
-
-            conceptos.orders.forEach(row => {
-                row.precioFormatted = `$ ${row.precio_pago}`;
-                nuevasRows.push(row)
-            });
-
-            tablaPrecios.rows.add(nuevasRows).draw();
-
-        }
-
-        $('#listaPreciosTable tbody').on('click', 'tr', function () {
-
-            var datosFila = tablaPrecios.row(this).data();
-            var indiceFila = tablaPrecios.row(this).index();
-
-            $('#modalModificarPrecio').data(datosFila);
-
-        });
-
-        $('#modalModificarPrecio').on('shown.bs.modal', function () {
-
-            let data = $('#modalModificarPrecio').data();
-            $('#nuevo_precio').val(data.precio_pago);
-
-        });
-
-        $('#modificarPrecioForm').on('submit', async function (event) {
-
-            event.preventDefault();
-
-            const data = $('#modalModificarPrecio').data();
-
-            const precio_pago = $('#nuevo_precio').val()
-
-            await $.post('/gimnasio/actualizar/precio', { id: data.id, precio_pago });
-
-            $('#modalModificarPrecio').modal('hide');
-
-            obtenerConceptos();
-
-        });
-
-
-        $('#agregarDescForm').on('submit', async function (event) {
-
-            event.preventDefault();
-
-            const $form = $("#agregarDescForm");
-            const data = getFormData($form);
-
-            data.fecha_vencimiento_timestamp = data.fecha_vencimiento != '' ? obtenerTimestamp(data.fecha_vencimiento) : 4102466399;
-            data.fecha_vencimiento = data.fecha_vencimiento != '' ? data.fecha_vencimiento : '2099-12-31';
-            data.limite_usos = data.limite_usos != '' ? parseInt(data.limite_usos) : 999999;
-            data.limite_usuario = data.limite_usuario != '' ? parseInt(data.limite_usuario) : 999999;
-            data.valor_descuento = parseInt(data.valor_descuento);
-
-            const datosModal = $('#modalAgregarDesc').data();
-
-            let state = '';
-            let message = '';
-
-            if( datosModal.id ){
-
-                data.id = datosModal.id;
-
-                const updDesc = await asyncPostAjax('/descuento/actualizar', data);
-
-                state = updDesc.state;
-                message = updDesc.message;
-
-            }else{
-
-                data.status = 'true';
-
-                const postDesc = await asyncPostAjax('/descuento/agregar', data);
-
-                state = postDesc.state;
-                message = postDesc.message;
-                
-            }
-
-            if ( state = 'success' ) {
-
-                    $('#modalAgregarDesc').modal('toggle');
-
-            }
-            
-            obtenerDescuentos();
-            showNotification( state, message );
-
-        });
-
-
-        $('#btnSubmitAgregarDesc').on('click', async function (event) {
-
-            $('#modalAgregarDesc').removeData();
-
-        });
-
-
-        $('#modalAgregarDesc').on('hide.bs.modal', function () {
-
-            select2Tipo.val(null).trigger("change");
-            select2Concepto.val(null).trigger("change");
-            $("#nombre_descuento").val('');
-            $("#codigo_descuento").val('');
-            $("#valor_descuento").val('');
-            $("#limite_usos").val('');
-            $("#limite_usuario").val('');
-            $("#fecha_vencimiento").val('');
-
-        });
-
-
-        $('#modalAgregarDesc').on('shown.bs.modal', function () {
-
-            let data = $('#modalAgregarDesc').data();
-            
-            if( data.id ){
-
-                select2Tipo.val(data.tipo_descuento).trigger("change");
-                select2Concepto.val(data.concepto_descuento).trigger("change");
-                $("#nombre_descuento").val(data.nombre_descuento);
-                $("#codigo_descuento").val(data.codigo_descuento);
-                $("#valor_descuento").val(data.valor_descuento);
-                data.limite_usos != 999999 ? $("#limite_usos").val(data.limite_usos) : '';
-                data.limite_usuario != 999999 ? $("#limite_usuario").val(data.limite_usuario) : '';
-                data.fecha_vencimiento != '2099-12-31' ? $("#fecha_vencimiento").val(data.fecha_vencimiento) : '';
-
-            }
-
-
-        });
-
-
-        function obtenerTimestamp(fechaInput) {
-
-            // Crea un objeto Date a partir del valor del campo de entrada
-            const fechaObjeto = new Date(fechaInput);
-
-            // Obtiene el desplazamiento horario (offset) en minutos
-            const offset = fechaObjeto.getTimezoneOffset();
-
-            // Ajusta la fecha restando el desplazamiento horario en minutos
-            fechaObjeto.setMinutes(fechaObjeto.getMinutes() - offset);
-
-            // Obtén el timestamp en milisegundos (milisegundos desde el 1 de enero de 1970)
-            const timestamp = fechaObjeto.getTime();
-
-            return timestamp;
-        }
-
-        async function obtenerDescuentos() {
-
-            var infinito = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="30" height="30" viewBox="0 0 24 24" stroke-width="1.0" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M9.828 9.172a4 4 0 1 0 0 5.656a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
-            </svg>`;
-
-            let mapConceptos = {
-                'inscripcion': 'Inscripción',
-                'todos_conceptos': 'Todos',
-                'diario': 'Diario',
-                'semanal': 'Semanal',
-                'mensual': 'Mensual',
-                'bimestral': 'Bimestral',
-                'semestral': 'Semestral',
-                'anual': 'Anual',
-            }
-
-            let mapTipos = {
-                'precio_fijo': 'Precio fijo',
-                'porcentaje': 'Porcentaje',
-                'descontar_cantidad': 'Descontar cantidad',
-            }
-
-            tablaPromos.clear().draw()
-
-            var descuentos = await $.get('/gimnasio/obtener/descuentos');
-
-            for (const row of descuentos.desc) {
-
-                row.usos_totales = row.limite_usos == 999999 ? `${row.usos_actuales} / ${infinito}` : `${row.usos_actuales} / ${row.limite_usos}`
-                row.formattTipo = mapTipos[row.tipo_descuento]
-                row.formattConceptos = mapConceptos[row.concepto_descuento]
-
-            }
-
-            tablaPromos.rows.add(descuentos.desc).draw();
-
-        }
-
-
-        $('#listaPromosTable tbody').on('click', 'tr', function () {
-
-            var datosFila = tablaPromos.row(this).data();
-            var indiceFila = tablaPromos.row(this).index();
-
-            $('#eliminarDescuento').data(datosFila);
-
-            $('#modalAgregarDesc').data(datosFila);
-
-        });
-
-        $("#btnEliminarDescuento").click( async function(){
-
-            let datos = $('#eliminarDescuento').data();
-
-            const delDesc = await asyncPostAjax('/gimnasio/eliminar/descuentos', { id:datos.id });
-
-
-            if (delDesc.state = 'success') {
-
-                showNotification(delDesc.state, delDesc.message);
-                obtenerDescuentos();
-
-            }
-
-        });
-
-
-        async function obtenerPagos() {
-
-            tablaPagos.clear().draw()
-
-            var pagos = await $.get('/gimnasio/obtener/pagos');
-
-            var nuevasRows = [];
-
-            let rows = 1;
-            for (const row of pagos.orders) {
-
-                var dataUser = await $.post('/usuarios/consultar/', {id:row.id_usuario});
-
-                if(row.pago_inscripcion == 'true'){
-                    row.pago_inscripcion_text = 'Sí'
-                }else{
-                    row.pago_inscripcion_text = 'No'
-                }
-                row.nombre_usuario = dataUser.datos ? dataUser.datos.nombre_usuario : row.nombre_usuario;
-
-                row.fecha = toDateWHours(row.fecha_pago);
-
-                nuevasRows.push(row)
-
-            };
-
-            tablaPagos.rows.add(nuevasRows).draw();
-
-        }
-
-
-
-        $('#concepto_descuento').on('select2:select', function(e) {
-            
-            var opcionSeleccionada = e.params.data.id;
-
-            if( opcionSeleccionada == 'todos_conceptos' ){
-
-                $('#tipo_descuento').val('porcentaje').trigger('change.select2');
-                $('#tipo_descuento').prop('disabled', true);
-
-            }else{
-
-                $('#tipo_descuento').prop('disabled', false);
-
-            }
-
-
-        });
-
-
-
-
-
-
-
-
-
-
-        // Estadísticas
-
-        calcularIngresosMensuales();
-        calcularUltimosMesesIngresos();
-        calcularUsuariosActivos();
-        calcularUltimosMesesUsuarios();
-        calcularIngresosAnuales();
-        calcularUsuariosNoRenovados();
-
-
-        async function calcularUsuariosActivos(){
-
-            var fechaActual = new Date();
-            var timestamp = fechaActual.getTime();
-
-            var usuarios = await $.post('/gimnasio/usuarios/activos', {fechaActual:timestamp});
-
-            let timestamps = obtenerTimestampsMesActual();
-
-            var usuariosUnicos = await $.post('/gimnasio/usuarios/mensual', {
-                                                                        fechaInicio : timestamps.inicio, 
-                                                                        fechaFin:timestamps.fin
-                                                                    });
-
-
-            $('#usuariosUnicosMes').text(`${usuariosUnicos.resultados.length} únicos este mes`);
-            $('#cantUsuariosActivos').text(usuarios.resultados.length);
-
-        }
-
-        //Estadisticas de ingresos de los ultimos 4 meses
-        async function calcularUltimosMesesIngresos(){
-
-            // Ejemplo de uso
-            const mesesYFechas = obtenerUltimosMeses(4);
-
-            let meses = [];
-            let valores = [];
-            let timestamps = [];
-
-            for (let i = mesesYFechas.length - 1; i >= 0; i--) {
-
-                const elemento = mesesYFechas[i];
-
-                meses.push(elemento.mes);
-
-                var pagos = await $.post('/gimnasio/ingreso/intervalo', {fechaInicio: elemento.fechaInicio, fechaFin:elemento.fechaFin});
-
-                let ingresosTotales = 0.0;
-                pagos.resultados.forEach(pago => {
-
-                    let monto = pago.precio_total;
-                    monto = parseFloat(monto.replace('$', ''));
-                    ingresosTotales += monto;
-                    
-                    
-                });
-
-                valores.push(ingresosTotales)
-
-            }
-
-            var ctx = document.getElementById('ingresosMensualesGrafico').getContext('2d');
-                var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: meses,
-                    datasets: [{
-                    label: 'Usuarios mensuales',
-                    data: valores,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                    }
-                }
-            });
-
-        }
-
-
-        async function calcularUsuariosNoRenovados(){
-
-            const mesesYFechas = obtenerUltimosMeses(3);
-
-            console.log({mesesYFechas});
-
-            let fechaInicio = mesesYFechas[2].fechaInicio;
-            let fechaFin = mesesYFechas[0].fechaFin;
-
-            console.log(fechaInicio, fechaFin);
-
-            var pagos = await $.post('/usuarios/inactivos', {fechaInicio, fechaFin});
-
-            console.log({pagos: pagos});
-
-            $('#cantUsuariosNoRenovados').text(pagos.resultados.length);
-            $('#periodoNoRenovados').text(`Periodo ${mesesYFechas[2].mes} - ${mesesYFechas[0].mes}`);
-            
-        }
-
-        async function calcularIngresosAnuales(){
-
-
-            const timestamps = obtenerTimestampsAnoActual();
-
-            let fechaInicio = timestamps.inicio * 1000;
-            let fechaFin = timestamps.fin * 1000;
-
-            var pagos = await $.post('/gimnasio/ingreso/intervalo', {fechaInicio, fechaFin});
-
-            let ingresosTotales = 0.0;
-            pagos.resultados.forEach(pago => {
-
-                let monto = pago.precio_total;
-                monto = parseFloat(monto.replace('$', ''));
-                ingresosTotales += monto;
-                
-                
-            });
-
-
-
-            $('#cantMovimientosAnual').text(`${pagos.resultados.length} movimientos`);
-            $('#ingAnualesSpan').text(`${formatearComoMoneda(ingresosTotales)}`);
-
-
-        }
-
-        //Estadisticas de usuarios unicos de los ultimos 4 meses
-        async function calcularUltimosMesesUsuarios(){
-
-            // Ejemplo de uso
-            const mesesYFechas = obtenerUltimosMeses(4);
-
-            let meses = [];
-            let valores = [];
-            let timestamps = [];
-
-            for (let i = mesesYFechas.length - 1; i >= 0; i--) {
-
-                const elemento = mesesYFechas[i];
-
-                meses.push(elemento.mes);
-
-                var usuarios = await $.post('/gimnasio/usuarios/mensual', {fechaInicio: elemento.fechaInicio, fechaFin:elemento.fechaFin});
-
-                valores.push(usuarios.resultados.length)
-
-            }
-
-            var ctx = document.getElementById('usuariosActivosGrafico').getContext('2d');
-            var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: meses,
-                datasets: [{
-                label: 'Usuarios mensuales',
-                data: valores,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                y: {
-                    beginAtZero: true
-                }
-                }
-            }
-            });
-
-        }
-
-        //Sección de ingresos mensuales
-        async function calcularIngresosMensuales(){
-
-            const timestamps = obtenerTimestampsMesActual();
-
-            let fechaInicio = timestamps.inicio;
-            let fechaFin = timestamps.fin;
-
-            var pagos = await $.post('/gimnasio/ingreso/intervalo', {fechaInicio, fechaFin});
-
-            let ingresosTotales = 0.0;
-            pagos.resultados.forEach(pago => {
-
-                let monto = pago.precio_total;
-                monto = parseFloat(monto.replace('$', ''));
-                ingresosTotales += monto;
-                
-                
-            });
-
-            $('#cantMovimientos').text(`${pagos.resultados.length} movimientos`);
-            $('#ingMensualesSpan').text(`${formatearComoMoneda(ingresosTotales)}`);
-        }
-
-        //Función que regresa regresa los timestamps de los ultimos 4 meses
-        function obtenerUltimosMeses(cantidadMeses) {
-            const hoy = new Date();
-            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-            const resultados = [];
-
-            for (let i = 0; i < cantidadMeses; i++) {
-                const mesActual = hoy.getMonth() - i;
-                const fechaInicio = new Date(hoy.getFullYear(), mesActual, 1);
-                const fechaFin = new Date(hoy.getFullYear(), mesActual + 1, 0, 23, 59, 59, 999);
-
-                resultados.push({
-                mes: meses[mesActual],
-                fechaInicio: fechaInicio.getTime(),
-                fechaFin: fechaFin.getTime()
-                });
-            }
-
-            return resultados;
-        }
-
-        function obtenerTimestampsMesActual() {
-            const ahora = new Date(); // Obtenemos la fecha actual
-            const primerDiaDelMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1); // Primer día del mes actual
-            const ultimoDiaDelMes = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0); // Último día del mes actual
-            
-            const inicioDelMesTimestamp = primerDiaDelMes.getTime(); // Timestamp del inicio del mes
-            const finDelMesTimestamp = ultimoDiaDelMes.getTime() + 86399999; // Timestamp del final del mes (23:59:59.999)
-
-            return {
-                inicio: inicioDelMesTimestamp,
-                fin: finDelMesTimestamp
-            };
-        }
-
-
-        function obtenerTimestampsAnoActual() {
-            const fechaActual = new Date();
-            const inicioDelAnio = new Date(fechaActual.getFullYear(), 0, 1); // 0 representa enero
-            const finalDelAnio = new Date(fechaActual.getFullYear(), 11, 31); // 11 representa diciembre
-
-            const timestampInicio = inicioDelAnio.getTime() / 1000; // Divide por 1000 para obtener el timestamp en segundos
-            const timestampFinal = finalDelAnio.getTime() / 1000; // Divide por 1000 para obtener el timestamp en segundos
-
-            return {
-                inicio: timestampInicio,
-                final: timestampFinal
-            };
-        }
-
-
-        function formatearComoMoneda(numero) {
-            // Verifica si el número tiene decimales
-            const tieneDecimales = numero % 1 !== 0;
-
-            // Configuración para el formato de moneda
-            const formatoMoneda = {
-                style: 'currency',
-                currency: 'USD', // Puedes cambiar esto a la moneda que desees
-                minimumFractionDigits: tieneDecimales ? 2 : 0, // Muestra 2 decimales si hay, de lo contrario, muestra 0
-                maximumFractionDigits: tieneDecimales ? 2 : 0, // Muestra 2 decimales si hay, de lo contrario, muestra 0
-            };
-
-            // Formatea el número como moneda y agrega el símbolo y el espacio
-            return '' + numero.toLocaleString('en-US', formatoMoneda);
-        }
-
-
-
-        function toDate(timestamp) {
-            // Crear un objeto de fecha a partir del timestamp en milisegundos
-            const fechaObjeto = new Date(timestamp);
-
-            // Obtener los componentes de la fecha
-            const dia = String(fechaObjeto.getDate()).padStart(2, '0'); // Agregar ceros a la izquierda si el día es menor a 10
-            const mes = String(fechaObjeto.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0 a 11, se suma 1 y se agregan ceros a la izquierda si el mes es menor a 10
-            const anio = fechaObjeto.getFullYear();
-
-            // Formatear la fecha como DD/MM/YYYY
-            const fechaFormateada = `${dia}/${mes}/${anio}`;
-
-            return fechaFormateada;
-        }
-
-
-        function toDateWHours(timestamp) {
-            const date = new Date(timestamp);
-
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Los meses son base 0, por eso se suma 1
-            const year = date.getFullYear().toString().substr(-2); // Tomar los últimos 2 dígitos del año
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-
-            const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-            return formattedDate;
-        }
-
-
-
-
-
-        function getFormData($form) {
-
-            var unindexed_array = $form.serializeArray();
-            var indexed_array = {};
-
-            $.map(unindexed_array, function (n, i) {
-
-                indexed_array[n['name']] = n['value'].trim();
-
-            });
-
-            return indexed_array;
-
-        }
-
-        async function asyncPostAjax(path, data,) {
-
-            return await $.ajax({
-
-                type: 'POST',
-                url: path,
-                data: JSON.stringify(data),
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                success: function (result) {
-
-                    return result;
-
-                },
-
-            });
-
-        }
-
-        async function asyncGetAjax(path) {
-
-            return await $.ajax({
-
-                type: 'GET',
-                url: path,
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                success: function (result) {
-
-                    return result;
-
-                },
-
-            });
-
-        }
-
-
-    })
-
-
-</script>
+<script src="../assets/scripts/gimnasio/estadisticas.js"></script>
+<script src="../assets/scripts/gimnasio/gimnasio.js"></script>

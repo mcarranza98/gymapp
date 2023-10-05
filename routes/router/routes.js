@@ -379,6 +379,8 @@ router.post('/descuento/agregar', function(req, res, next) {
         fecha_vencimiento_timestamp,
         status
     };
+
+    console.log({datosDescuento});
     
     insertDescuento(datosDescuento);
 
