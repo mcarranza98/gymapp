@@ -6,6 +6,11 @@ const action_iconsNP = `<div class="d-flex order-actions buttonsActions" bis_ski
 $(document).ready(async function () {
 
 
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
     //INIXIALIZAR SELECT2
     var select2Concepto = $('#concepto_descuento').select2({
         minimumResultsForSearch: Infinity,

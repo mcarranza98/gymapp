@@ -124,3 +124,15 @@ table.dataTable.no-footer {
     display: block;
 }
 
+.app-content{
+    margin-top: 0px !important;
+}
+
+.app-content .page-description {
+    overflow: hidden;
+    padding: 0px 0 10px;
+    font-size: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccd6ed;
+}
+
