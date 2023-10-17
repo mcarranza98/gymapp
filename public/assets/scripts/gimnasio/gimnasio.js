@@ -200,6 +200,8 @@ $(document).ready(async function () {
         data.limite_usuario = data.limite_usuario != '' ? parseInt(data.limite_usuario) : 999999;
         data.valor_descuento = parseInt(data.valor_descuento);
 
+        data.tipo_descuento = $('#tipo_descuento').val();
+
         const datosModal = $('#modalAgregarDesc').data();
 
         let state = '';
