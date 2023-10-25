@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 const axios = require('axios');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, session } = require('electron');
 const pie = require('puppeteer-in-electron');
 const puppeteer = require('puppeteer-core');
 //const server = require('../app');
@@ -12,17 +12,19 @@ async function crearConceptos() {
   let command = db_questions.prepare('SELECT * FROM conceptos');
   const orders = command.all();
 
+  console.log('Hola');
+
   if (orders.length == 0) {
-    console.log('hola');
 
     await axios.post('http://localhost:3000/gimnasio/agregar/concepto');
+  
   }
 }
 
 const createApp = async () => {
 
   const { browser, window } = await createMainWindow(app);
-  //crearConceptos()
+  crearConceptos()
 
 };
 
@@ -41,6 +43,8 @@ const createMainWindow = async (app) => {
     },
     useContentSize: true,
   });
+
+  
 
   mainWindow.maximize();
   mainWindow.loadURL('http://localhost:3000');
