@@ -114,10 +114,11 @@ $(document).ready(async function () {
         },
         columns: [
             { data: 'fecha_pago', title: '', visible: false },
-            { data: 'fecha', title: 'Fecha de pago', width: '20%', visible: true },
-            { data: 'nombre_usuario', title: 'Usuario', width: '35%', visible: true },
-            { data: 'pago_concepto', title: 'Concepto', width: '15%', visible: true },
-            { data: 'pago_inscripcion_text', title: 'Inscripción', width: '15%', visible: true },
+            { data: 'fecha', title: 'Fecha de pago', width: '15%', visible: true },
+            { data: 'nombre_usuario', title: 'Usuario', width: '30%', visible: true },
+            { data: 'pago_concepto', title: 'Concepto', width: '13%', visible: true },
+            { data: 'metodo_pago_formatted', title: 'Método de pago', width: '13%', visible: true },
+            { data: 'pago_inscripcion_text', title: 'Inscripción', width: '13%', visible: true },
             { data: 'precio_total', title: 'Total', width: '15%', orderable: true }
         ],
         autoWidth: false,
@@ -379,6 +380,14 @@ $(document).ready(async function () {
         var nuevasRows = [];
 
         let rows = 1;
+
+
+        let metodosPagoMap = {
+            deposito : 'Depósito',
+            tarjeta : 'Tarjeta',
+            efectivo : 'Efectivo'
+        }
+
         for (const row of pagos.orders) {
 
             var dataUser = await $.post('/usuarios/consultar/', { id: row.id_usuario });
@@ -388,6 +397,10 @@ $(document).ready(async function () {
             } else {
                 row.pago_inscripcion_text = 'No'
             }
+
+
+            row.metodo_pago_formatted = metodosPagoMap[row.metodo_pago];    
+
             row.nombre_usuario = dataUser.datos ? dataUser.datos.nombre_usuario : row.nombre_usuario;
 
             row.fecha = toDateWHours(row.fecha_pago);

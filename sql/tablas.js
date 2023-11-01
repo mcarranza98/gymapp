@@ -53,11 +53,11 @@ const initPromos = `CREATE TABLE IF NOT EXISTS descuentos (
                         concepto_descuento TEXT NOT NULL,
                         tipo_descuento TEXT NOT NULL, 
                         valor_descuento INTEGER NOT NULL,
-                        limite_usos INTEGER NOT NULL,
-                        usos_actuales NTEGER NOT NULL,
-                        limite_usuario INTEGER NOT NULL,
-                        fecha_vencimiento TEXT NOT NULL,
-                        fecha_vencimiento_timestamp INTEGER NOT NULL,
+                        limite_usos INTEGER,
+                        usos_actuales NTEGER,
+                        limite_usuario INTEGER,
+                        fecha_vencimiento TEXT,
+                        fecha_vencimiento_timestamp INTEGER,
                         status TEXT NOT NULL
                         )`;
 
@@ -70,7 +70,7 @@ const db_pagos = new Database(path.join(__dirname, '..' , 'database' , 'pagos.db
 
 const initPagos = `CREATE TABLE IF NOT EXISTS pagos (
                         id TEXT NOT NULL,
-                        descuentos_aplicados TEXT NOT NULL,
+                        descuentos_aplicados TEXT,
                         fecha_pago INTEGER NOT NULL,
                         fecha_sig_pago INTEGER NOT NULL,
                         id_usuario TEXT NOT NULL,
@@ -80,9 +80,10 @@ const initPagos = `CREATE TABLE IF NOT EXISTS pagos (
                         precio_inscripcion TEXT NOT NULL,
                         precio_modalidad TEXT NOT NULL,
                         precio_total TEXT NOT NULL, 
-                        descuento_inscripcion TEXT NOT NULL,
-                        descuento_modalidad TEXT NOT NULL,
-                        nombre_usuario TEXT NOT NULL
+                        descuento_inscripcion TEXT,
+                        descuento_modalidad TEXT,
+                        nombre_usuario TEXT NOT NULL,
+                        metodo_pago TEXT NOT NULL
                         )`;
 
 db_pagos.prepare(initPagos).run();

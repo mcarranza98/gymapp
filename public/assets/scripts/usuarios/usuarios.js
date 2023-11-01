@@ -19,6 +19,11 @@ $(document).ready(function () {
         placeholder: 'Selecciona una opción',
         allowClear: true
     });
+    var select2MetodoPago = $('#selectMetodoPago').select2({
+        minimumResultsForSearch: Infinity,
+        placeholder: 'Selecciona una opción',
+        allowClear: true
+    });
 
 
     obtenerDescuentos()
@@ -274,6 +279,7 @@ $(document).ready(function () {
         data.nombre_usuario = dataModal.nombre_usuario;
         data.id_usuario = dataModal.id;
 
+        //Si hay algún descuento actualizar la información de los mismos y agregarles un uso
         if (valoresSeleccionados.length > 0) {
             await asyncPostAjax('/gimnasio/actualizar/descuento', { id: valoresSeleccionados });
         }
@@ -283,6 +289,10 @@ $(document).ready(function () {
             var infoSigPago = sigPago(data.pago_concepto, data.fecha_pago);
 
             data.fecha_sig_pago = infoSigPago.sig_pago_timestamp;
+
+            console.log({data});
+
+            //Agregar el pago a la base de datos
             const postPago = await asyncPostAjax('/pagos/agregar', data);
 
             if (postPago.state = 'success') {
@@ -293,8 +303,6 @@ $(document).ready(function () {
 
                 //ACTUALIZAR LA INFORMACIÓN DEL USUARIO
 
-
-
                 var datosUser = {
                     id: dataModal.id,
                     modalidad_actual: data.pago_concepto,
@@ -302,6 +310,7 @@ $(document).ready(function () {
                     sig_pago_timestamp: infoSigPago.sig_pago_timestamp
                 }
 
+                //Actualizar la fecha del siguiente pago al usuario
                 let actUser = await asyncPostAjax('/usuario/actualizar/pago', datosUser);
 
                 resetTablaUsuarios()

@@ -161,7 +161,7 @@
             <div class="modal-body">
                 <form id="pagoUsuario">
                     <div class="row">
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-4">
                             <label for="modalidad" class="form-label">Modalidad de pago</label>
                             <select style="width: 100%;" class="form-select" id="selectModalidadPago"
                                 name="pago_modalidad" aria-label="Selecciona la modalidad">
@@ -178,7 +178,19 @@
                             <label for="fecha_ingreso" class="form-label">Fecha de pago</label>
                             <input type="date" name="fecha_de_pago" class="form-control" id="fechaPago">
                         </div>-->
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col-4">
+                            <label for="descuentos_aplicados" class="form-label">Método de pago</label>
+                            <div>
+                                <select style="width: 100%;" class="form-select" id="selectMetodoPago"
+                                name="metodo_pago" aria-label="Selecciona la modalidad">
+                                    <option value=""></option>
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="tarjeta">Tarjeta crédito / débito</option>
+                                    <option value="deposito">Depósito</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-4">
                             <label for="descuentos_aplicados" class="form-label">Código de descuento</label>
                             <div>
                                 <select style="width: 100%" class="select2-codigos-descuentos"
@@ -187,6 +199,7 @@
                             </div>
 
                         </div>
+                        
                         <div class="mb-3 col-5">
                             <div class="form-check">
                                 <input class="form-check-input" name="pago_inscripcion" type="checkbox"

@@ -670,13 +670,13 @@ router.post('/usuarios/consultar/', function(req, res, next) {
 
 router.post('/pagos/agregar', function(req, res, next) {
 
-    const {descuentos_aplicados, fecha_pago, id_usuario,fecha_sig_pago , pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario} = req.body
+    const {descuentos_aplicados, fecha_pago, id_usuario,fecha_sig_pago , pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario, metodo_pago} = req.body
 
     const db = new Database(path.join(__dirname, '..' , '..' , 'database' , 'pagos.db'));
 
 
-    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, fecha_sig_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario) 
-                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @fecha_sig_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad, @nombre_usuario)`;
+    const command = `INSERT INTO pagos(id, descuentos_aplicados, fecha_pago, fecha_sig_pago, id_usuario, pago_concepto, pago_inscripcion, pago_modalidad, precio_inscripcion, precio_modalidad, precio_total, descuento_inscripcion, descuento_modalidad, nombre_usuario, metodo_pago) 
+                    VALUES(@id, @descuentos_aplicados, @fecha_pago, @fecha_sig_pago, @id_usuario, @pago_concepto, @pago_inscripcion, @pago_modalidad, @precio_inscripcion, @precio_modalidad, @precio_total, @descuento_inscripcion, @descuento_modalidad, @nombre_usuario, @metodo_pago)`;
                             
     const insert = db.prepare(command);
     
@@ -704,7 +704,8 @@ router.post('/pagos/agregar', function(req, res, next) {
         precio_total,
         descuento_inscripcion,
         descuento_modalidad,
-        nombre_usuario
+        nombre_usuario,
+        metodo_pago
     };
      
     insertPago(datosPago);
