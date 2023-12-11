@@ -1,0 +1,129 @@
+<div class="row">
+    <div class="col">
+        <div class="page-description d-flex justify-content-between">
+            <h1>Control de gastos</h1>
+            <button id="btnAgregarUsuario" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#agregarUsuario">Agregar gasto</button>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="section-body">
+            <table id="gastosTable" class="hover" style="width:100%">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!--MODALES-->
+
+<!--MODAL AGREGAR USUARIOS-->
+
+<div class="modal fade" id="agregarUsuario" tabindex="-1" aria-labelledby="agregarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarUsuarioLabel">Agregar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="agregarUsuarioForm">
+                    <div class="row">
+
+                        <h5>Datos personales</h5>
+                        <div class="mb-3 col-12">
+                            <label for="nombre_usuario" class="form-label">Nombre completo</label>
+                            <input type="text" name="nombre_usuario" id="nombre_usuario" class="form-control"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="telefono_usuario" class="form-label">Número de teléfono</label>
+                            <input type="number" name="telefono_usuario" id="telefono_usuario" class="form-control"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="nombre" class="form-label">Sexo</label>
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" value="hombre" name="radio_sexo" id="radio_sexo1"
+                                    autocomplete="off">
+                                <label class="btn btn-outline-primary" for="radio_sexo1">Hombre</label>
+
+                                <input type="radio" class="btn-check" value="mujer" name="radio_sexo" id="radio_sexo2"
+                                    autocomplete="off">
+                                <label class="btn btn-outline-primary" for="radio_sexo2">Mujer</label>
+
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-6">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
+                                id="fechaPago">
+                        </div>
+
+                        <hr class="mt-2">
+
+                        <h5 class="mt-2">Contacto de emergencia</h5>
+
+                        <div class="mb-3 col-12">
+                            <label for="nombre_contacto" class="form-label">Nombre completo</label>
+                            <input type="text" name="nombre_contacto" id="nombre_contacto" class="form-control"
+                                aria-describedby="emailHelp">
+
+                        </div>
+
+                        <div class="mb-3 col-12">
+                            <label for="telefono_contacto" class="form-label">Número de teléfono</label>
+                            <input type="number" name="telefono_contacto" class="form-control" id="telefono_contacto"
+                                aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="agregarUsuarioForm" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL ELIMINAR USUARIO -->
+
+<div class="modal fade" id="eliminarUsuario" tabindex="-1" aria-labelledby="eliminarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarUsuarioLabel">Eliminar usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>¿Estas seguro que deseas eliminar a...?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">No, cancelar.</button>
+                <button type="button" id="btnEliminarUsuario" class="btn btn-danger" data-bs-dismiss="modal">Sí,
+                    eliminar.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="../assets/scripts/control/control.js"></script>

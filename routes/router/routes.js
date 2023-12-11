@@ -66,6 +66,20 @@ router.get('/sign-up', function(req, res, next) {
   
 });
 
+
+router.get('/control', function(req, res, next) {
+    
+
+    if( req.cookies.cuenta ){
+        res.render('control-gastos', { title: 'Control de gastos' });
+    }else{
+        res.render('sign-in', { title: 'Gym Support - Tu aliado en la gestión de tu gimnasio', layout: false });
+    }
+      
+
+});
+
+
 router.post('/agregar-cuenta', function(req, res, next) {
 
     const { cuenta } = req.body;
